@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"target": "es2018",
+		"module": "commonjs",
+		"sourceMap": true,
+		"outDir": "dist",
+		"noUnusedLocals": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"strict": true
+	},
+	"exclude": [ "node_modules" ],
+	"include": [
+		"global.d.ts",
+		"thirdparty.d.ts",
+		"src",
+	]
+}
