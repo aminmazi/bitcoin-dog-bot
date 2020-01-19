@@ -1,5 +1,6 @@
 import Telegraf, { ContextMessageUpdate, Extra, Markup } from "telegraf";
 import { COMMANDS } from "../utils/commands";
+
 export default async function registerMenu(
   bot: Telegraf<ContextMessageUpdate>,
 ) {
