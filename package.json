@@ -12,7 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "ts-node-dev": "^1.0.0-pre.44"
   },
   "dependencies": {
     "envalid": "^6.0.0",
