@@ -1,7 +1,6 @@
 export const enum COMMANDS {
   MENU = "menu",
   STATS = "stats",
-  UNCONFIRMED = "unconfirmed",
   PRICE_ALERT_UP = "price_alert_up",
 }
 
