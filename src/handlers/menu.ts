@@ -1,5 +1,5 @@
 import Telegraf, { ContextMessageUpdate, Extra, Markup } from "telegraf";
-import { COMMANDS } from "../utils/commands";
+import { COMMANDS } from "../utils/consts";
 
 export default async function registerMenu(
   bot: Telegraf<ContextMessageUpdate>,
@@ -17,9 +17,9 @@ async function printStatsMenu(ctx: ContextMessageUpdate) {
   return ctx.reply(
     `<b>Choose one of the commands on the menu or switch to another category using the buttons below the menu.</b>
 
-<i>${COMMANDS.PRICE} → get current bitcoin price ＄</i>
+<i>/${COMMANDS.STATS} → Get current bitcoin stats ℹ️</i>
 
-<i>${COMMANDS.UNCONFIRMED} → Unconfirmed Txs ⏳</i>`,
+<i>/${COMMANDS.UNCONFIRMED} → Unconfirmed Txs ⏳</i>`,
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton("* Stats *", "Stats"),
@@ -35,7 +35,7 @@ async function switchToAlertMenu(ctx: ContextMessageUpdate) {
     `<strong>Alerts 🔔</strong>
 <b>You can set an alert and we will send you a message when an alert is triggered</b>
 
-<i>${COMMANDS.PRICE_ALERT_UP} 📈 → Notify me when price is more than x</i>`,
+<i>/${COMMANDS.PRICE_ALERT_UP} 📈 → Notify me when price is more than x</i>`,
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton("Stats", "Stats"),
@@ -50,9 +50,9 @@ async function switchToStatsMenu(ctx: ContextMessageUpdate) {
   await ctx.editMessageText(
     `<strong>Stats ℹ️</strong>
 
-<i>${COMMANDS.PRICE} → get current bitcoin price ＄</i>
+<i>/${COMMANDS.STATS} → get current bitcoin price ＄</i>
 
-<i>${COMMANDS.UNCONFIRMED} → Unconfirmed Txs ⏳</i>`,
+<i>/${COMMANDS.UNCONFIRMED} → Unconfirmed Txs ⏳</i>`,
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton("* Stats *", "Stats"),

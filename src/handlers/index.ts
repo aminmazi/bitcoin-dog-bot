@@ -1,5 +1,5 @@
 import registerMenu from "./menu";
-import registerPrice from "./price";
+import registerPrice from "./stats";
 import Telegraf, { ContextMessageUpdate } from "telegraf";
 
 export async function registerHandlers(
