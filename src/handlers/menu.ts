@@ -32,7 +32,7 @@ async function switchToAlertMenu(ctx: ContextMessageUpdate) {
   await ctx.answerCbQuery();
   await ctx.editMessageText(
     `<strong>Alerts 🔔</strong>
-<b>You can set an alert and we will send you a message when an alert is triggered</b>
+<b>You can set an alert and we will send you a message when an alert is triggered.</b>
 
 <i>/${COMMANDS.PRICE_ALERT_UP} 📈 → Notify me when price is more than x</i>`,
     Extra.HTML().markup((m: any) =>

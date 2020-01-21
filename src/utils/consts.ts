@@ -6,5 +6,6 @@ export const enum COMMANDS {
 
 export enum CACHE_KEYS {
   PRICE = "PRICE",
+  PRICE_CHANGE = "PRICE_CHANGE",
   NUM_OF_UNCONFIRMED = "NUM_OF_UNCONFIRMED",
 }
