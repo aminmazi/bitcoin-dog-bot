@@ -1,7 +1,8 @@
-import envalid from "envalid";
+import envalid from 'envalid';
 
 const env = envalid.cleanEnv(process.env, {
   BOT_TOKEN: envalid.str(),
+  MONGO: envalid.str(),
   CACHE_INTERVAL: envalid.num({ default: 30 }),
 });
 

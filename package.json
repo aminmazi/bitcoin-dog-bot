@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/mongoose": "^5.5.43",
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.0",
     "ts-node-dev": "^1.0.0-pre.44"
@@ -19,6 +20,7 @@
   "dependencies": {
     "axios": "^0.19.1",
     "envalid": "^6.0.0",
+    "mongoose": "^5.8.9",
     "node-cache": "^5.1.0",
     "telegraf": "^3.35.0",
     "telegraf-ratelimit": "^2.0.0"
