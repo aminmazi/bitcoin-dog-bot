@@ -1,41 +1,39 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+var UserSchema = new Schema(
+  {
     telegramId: {
-        type: Number,
-        required: 'Enter a id',
-        unique: true,
-        index: true
+      type: Number,
+      required: "Enter a id",
+      unique: true,
+      index: true,
     },
     language: {
-        type: String,
-        default: 'fa'
+      type: String,
+      default: "fa",
     },
     firstName: {
-        type: String
+      type: String,
     },
     lastName: {
-        type: String
+      type: String,
     },
     isBot: {
-        type: Boolean
+      type: Boolean,
     },
     username: {
-        type: String
+      type: String,
     },
-    created_date: {
-        type: Date,
-        default: Date.now
+    usage: {
+      type: Number,
+      default: 0,
     },
-    created_user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
-}, {timestamps: true});
+  },
+  { timestamps: true },
+);
 
-
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model("User", UserSchema);
 
 export default User;

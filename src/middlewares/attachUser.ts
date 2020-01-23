@@ -1,9 +1,8 @@
-import UserController from '../controller/userController';
+import { incrementUserUsage } from "../service/userService";
 
 export async function attachUser(ctx: any, next: any) {
-    if (ctx.from) {
-        let userCtrl = new UserController();
-        await userCtrl.findOrCreateUser(ctx.from);
-    }
-    next();
+  if (ctx.from) {
+    incrementUserUsage(ctx.from);
+  }
+  next();
 }

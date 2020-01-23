@@ -1,7 +1,7 @@
 import axios from "axios";
-import { cache } from "./cache";
-import { CACHE_KEYS } from "./consts";
-import env from "./env";
+import { cache } from "../utils/cache";
+import { CACHE_KEYS } from "../utils/consts";
+import env from "../utils/env";
 
 export async function getPrice(): Promise<number> {
   let price = cache?.get<number>(CACHE_KEYS.PRICE);

@@ -3,7 +3,7 @@ import {
   getPrice,
   getNumOfUnconfirmed,
   getPriceChange,
-} from "../utils/blockchainApi";
+} from "../service/blockchainApi";
 import { COMMANDS } from "../utils/consts";
 
 export default async function registerStats(
