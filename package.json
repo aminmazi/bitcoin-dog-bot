@@ -22,6 +22,7 @@
     "envalid": "^6.0.0",
     "mongoose": "^5.8.9",
     "node-cache": "^5.1.0",
+    "taapi": "^1.1.1",
     "telegraf": "^3.35.0",
     "telegraf-ratelimit": "^2.0.0"
   }

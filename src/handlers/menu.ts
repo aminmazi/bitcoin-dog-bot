@@ -18,7 +18,9 @@ async function printStatsMenu(ctx: ContextMessageUpdate) {
   return ctx.reply(
     `<b>Choose one of the commands on the menu or switch to another category using the buttons below the menu.</b>
 
-<i>/${COMMANDS.STATS} → Get current bitcoin status ℹ️</i>`,
+<i>/${COMMANDS.STATS} → Get current bitcoin status ℹ️</i>
+
+<i>/${COMMANDS.TECHNICAL_ANALYSIS} → Get technical analysis 🧠</i>`,
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton("* Stats *", "Stats"),
@@ -49,7 +51,9 @@ async function switchToStatsMenu(ctx: ContextMessageUpdate) {
   await ctx.editMessageText(
     `<strong>Stats ℹ️</strong>
 
-<i>/${COMMANDS.STATS} → get current bitcoin price ＄</i>`,
+<i>/${COMMANDS.STATS} → Get current bitcoin status ℹ️</i>
+
+<i>/${COMMANDS.TECHNICAL_ANALYSIS} → Get technical analysis 🧠</i>`,
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton("* Stats *", "Stats"),
