@@ -37,7 +37,7 @@ export async function getRSI(interval: string): Promise<RsiResult> {
       rsi: result.value,
       suggestion: generateSuggestionFromRsi(result.value),
     };
-    cache?.set(`${CACHE_KEYS.TA_RSI}_${interval}`, rsiResult, 3600);
+    cache?.set(`${CACHE_KEYS.TA_RSI}_${interval}`, rsiResult, env.TAAPI_CACHE_INTERVAL);
   }
   return rsiResult;
 }
