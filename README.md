@@ -1,6 +1,7 @@
 # bitcoin-dog-bot
 *Telegram bot for Bitcoin* 
 
+
 ### Use this bot
 https://t.me/bitcoin_dog_bot
 
@@ -10,6 +11,8 @@ https://t.me/bitcoin_dog_bot
 npm i
 npm run start:dev
 ```
+
+
 ### 3d party apis
 Powered by CoinDesk for price information.
 
