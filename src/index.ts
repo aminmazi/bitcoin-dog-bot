@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import rateLimit from "telegraf-ratelimit";
 import { createInstance as initCacheInstance } from "./utils/cache";
 import { attachUser } from "./middlewares/attachUser";
+// import taapi from "taapi";
 
 // Set limit to 1 message per 3 seconds
 const limitConfig = {
@@ -48,6 +49,14 @@ async function main() {
   });
   bot.launch();
   console.log("bitcoin_dog_bot started! ");
+  // const client = taapi.client(env.TAAPI);
+  // let result;
+  // try {
+  //   result = await client.getIndicator("macd", "binance", "BTC/USDT", "1h");
+  // } catch (error) {
+  //   console.log("error in taapi", error);
+  // }
+  // console.log(result);
 }
 
 main();
