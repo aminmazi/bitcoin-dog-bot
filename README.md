@@ -17,3 +17,5 @@ npm run start:dev
 Powered by CoinDesk for price information.
 
 TAAPI for technical analysis data.
+
+Ramzinex for price information in IRT currency.
