@@ -14,8 +14,8 @@ npm run start:dev
 
 # 
 ### 3d party apis
-Powered by CoinDesk for price information.
+💰 Powered by CoinDesk for price information.
 
-TAAPI for technical analysis data.
+📈 TAAPI for technical analysis data.
 
-Ramzinex for price information in IRT currency.
+🇮🇷 Ramzinex for price information in IRT currency.
