@@ -19,6 +19,22 @@ export async function getPrice(): Promise<number> {
   return price;
 }
 
+export async function getPriceIRT(): Promise<number> {
+  let price = cache?.get<number>(CACHE_KEYS.PRICE_IRT);
+  if (!price) {
+    //if price doesn't exist on cache, fetch price from api
+    price = await axios
+      .get("https://ramzinex.com/exchange/api/exchange/prices")
+      .then(res => res.data.original.btcirr.buy / 10);
+
+    cache?.set(CACHE_KEYS.PRICE_IRT, price, env.CACHE_INTERVAL);
+  }
+  if (!price) {
+    throw new Error("failed to get price IRT");
+  }
+  return price;
+}
+
 export async function getPriceChange(): Promise<number> {
   // 1. get current price
   let currentPrice = await getPrice();
