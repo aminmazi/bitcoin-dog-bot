@@ -5,10 +5,9 @@ import { ContextMessageUpdate } from "telegraf";
 export async function incrementUserUsage(ctx: ContextMessageUpdate) {
   try {
     const sender = ctx.from;
-    let user = await User.findOne({ telegramId: sender?.id });
+    let user = await User.findOne({ chatId: ctx.chat?.id });
     if (!user) {
       const userModel = new User({
-        telegramId: sender?.id,
         firstName: sender?.first_name,
         lastName: sender?.last_name,
         username: sender?.username,
@@ -17,7 +16,7 @@ export async function incrementUserUsage(ctx: ContextMessageUpdate) {
       });
       await new User(userModel).save();
     } else {
-      await user.updateOne({ $inc: { usage: 1 }, chatId: ctx.chat?.id });
+      await user.updateOne({ $inc: { usage: 1 } });
     }
   } catch (error) {
     console.log(error);

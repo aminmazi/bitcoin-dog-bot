@@ -2,10 +2,10 @@ import Telegraf, { Context } from "telegraf";
 import env from "./utils/env";
 import { registerHandlers } from "./handlers";
 import mongoose from "mongoose";
-//@ts-ignore
 import rateLimit from "telegraf-ratelimit";
 import { createInstance as initCacheInstance } from "./utils/cache";
 import { attachUser } from "./middlewares/attachUser";
+import alertWatcher from "./service/alertWatcher";
 // import taapi from "taapi";
 
 // Set limit to 1 message per 3 seconds
@@ -48,6 +48,8 @@ async function main() {
     console.log(`Ooops, encountered an error for ${ctx.updateType}`, err);
   });
   bot.launch();
+  // run alert service
+  alertWatcher(bot);
   console.log("bitcoin_dog_bot started! ");
   // const client = taapi.client(env.TAAPI);
   // let result;

@@ -36,7 +36,7 @@ async function switchToAlertMenu(ctx: ContextMessageUpdate) {
     `<strong>Alerts 🔔</strong>
 <b>You can set an alert and we will send you a message when an alert is triggered.</b>
 
-<i>/${COMMANDS.PRICE_ALERT_UP} 📈 → Notify me when price is more than x</i>`,
+<i>/${COMMANDS.PRICE_ALERT} 📈 → Notify me when bitcoin price crosses a specified value </i>`,
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton("Stats", "Stats"),

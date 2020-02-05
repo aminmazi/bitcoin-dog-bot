@@ -3,7 +3,18 @@ import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
 import env from "../utils/env";
 
-export async function getPrice(): Promise<number> {
+export async function getPrice(currency = "USD"): Promise<number> {
+  switch (currency) {
+    case "USD":
+      return await getPriceInUSD();
+    case "IRT":
+      return await getPriceIRT();
+  }
+  // normally shouldn't reach here
+  throw new Error("failed to get price");
+}
+
+async function getPriceInUSD(): Promise<number> {
   let price = cache?.get<number>(CACHE_KEYS.PRICE);
   if (!price) {
     //if price doesn't exist on cache, fetch price from api
@@ -19,7 +30,7 @@ export async function getPrice(): Promise<number> {
   return price;
 }
 
-export async function getPriceIRT(): Promise<number> {
+async function getPriceIRT(): Promise<number> {
   let price = cache?.get<number>(CACHE_KEYS.PRICE_IRT);
   if (!price) {
     //if price doesn't exist on cache, fetch price from api
@@ -77,4 +88,13 @@ export async function getNumOfUnconfirmed(): Promise<number> {
     throw new Error("failed to get numOfUnconfirmed");
   }
   return numOfUnconfirmed;
+}
+
+export async function getPriceForCurrency(currency: string): Promise<Number> {
+  if (currency.toUpperCase() === "USD")
+    return Number((await getPrice("USD")).toFixed(0));
+  else if (currency.toUpperCase() === "IRT")
+    return Number((await getPrice("IRT")).toFixed(0));
+  // normally shouldn't reach here
+  throw new Error("failed to get price");
 }

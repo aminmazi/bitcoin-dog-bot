@@ -4,12 +4,6 @@ const Schema = mongoose.Schema;
 
 var UserSchema = new Schema(
   {
-    telegramId: {
-      type: Number,
-      required: "Enter a telegramId",
-      unique: true,
-      index: true,
-    },
     chatId: {
       type: Number,
       required: "Enter a chatId",

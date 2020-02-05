@@ -3,7 +3,6 @@ import {
   getPrice,
   getNumOfUnconfirmed,
   getPriceChange,
-  getPriceIRT,
 } from "../service/blockchainApi";
 import { COMMANDS } from "../utils/consts";
 
@@ -14,8 +13,8 @@ export default async function registerStats(
 }
 
 async function printStatsCommand(ctx: ContextMessageUpdate) {
-  const price = Number((await getPrice()).toFixed(0)).toLocaleString();
-  const priceIRT = Number((await getPriceIRT()).toFixed(0)).toLocaleString();
+  const price = Number((await getPrice("USD")).toFixed(0)).toLocaleString();
+  const priceIRT = Number((await getPrice("IRT")).toFixed(0)).toLocaleString();
 
   const numOfUnconfirmed = await getNumOfUnconfirmed();
 
