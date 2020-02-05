@@ -27,7 +27,7 @@ async function printAlertUpCommand(ctx: ContextMessageUpdate) {
   const currency = params[2].toUpperCase();
   const alertUp = await getAlertTypeForCurrency(currency, to);
   await Alert.create({
-    chatId: ctx.from?.id,
+    chatId: ctx.chat?.id,
     currency,
     from: currency === "USD" ? priceInUsd : priceInIRT,
     to,
