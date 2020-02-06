@@ -1,5 +1,6 @@
 import Telegraf, { ContextMessageUpdate, Extra, Markup } from "telegraf";
 import { COMMANDS } from "../utils/consts";
+import { str, KEYS } from "../locals";
 
 export default async function registerMenu(
   bot: Telegraf<ContextMessageUpdate>,
@@ -16,15 +17,11 @@ export default async function registerMenu(
 }
 async function printStatsMenu(ctx: ContextMessageUpdate) {
   return ctx.reply(
-    `<b>Choose one of the commands on the menu or switch to another category using the buttons below the menu.</b>
-
-<i>/${COMMANDS.STATS} → Get current bitcoin status ℹ️</i>
-
-<i>/${COMMANDS.TECHNICAL_ANALYSIS} → Get technical analysis 🧠</i>`,
+    str(ctx, KEYS.MENU, [COMMANDS.STATS, COMMANDS.TECHNICAL_ANALYSIS]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
-        m.callbackButton("* Stats *", "Stats"),
-        m.callbackButton("Alerts", "Alerts"),
+        m.callbackButton(`* ${str(ctx, KEYS.STATS, [])} *`, "Stats"),
+        m.callbackButton(`${str(ctx, KEYS.ALERTS, [])}`, "Alerts"),
       ]),
     ),
   );
@@ -33,14 +30,11 @@ async function printStatsMenu(ctx: ContextMessageUpdate) {
 async function switchToAlertMenu(ctx: ContextMessageUpdate) {
   await ctx.answerCbQuery();
   await ctx.editMessageText(
-    `<strong>Alerts 🔔</strong>
-<b>You can set an alert and we will send you a message when an alert is triggered.</b>
-
-<i>/${COMMANDS.PRICE_ALERT} 📈 → Notify me when bitcoin price crosses a specified value </i>`,
+    str(ctx, KEYS.ALERT_MENU, [COMMANDS.PRICE_ALERT]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
-        m.callbackButton("Stats", "Stats"),
-        m.callbackButton("* Alerts *", "Alerts"),
+        m.callbackButton(`${str(ctx, KEYS.STATS, [])}`, "Stats"),
+        m.callbackButton(`* ${str(ctx, KEYS.ALERTS, [])} *`, "Alerts"),
       ]),
     ),
   );
@@ -49,15 +43,11 @@ async function switchToAlertMenu(ctx: ContextMessageUpdate) {
 async function switchToStatsMenu(ctx: ContextMessageUpdate) {
   await ctx.answerCbQuery();
   await ctx.editMessageText(
-    `<strong>Stats ℹ️</strong>
-
-<i>/${COMMANDS.STATS} → Get current bitcoin status ℹ️</i>
-
-<i>/${COMMANDS.TECHNICAL_ANALYSIS} → Get technical analysis 🧠</i>`,
+    str(ctx, KEYS.STATS_MENU, [COMMANDS.STATS, COMMANDS.TECHNICAL_ANALYSIS]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
-        m.callbackButton("* Stats *", "Stats"),
-        m.callbackButton("Alerts", "Alerts"),
+        m.callbackButton(`* ${str(ctx, KEYS.STATS, [])} *`, "Stats"),
+        m.callbackButton(`${str(ctx, KEYS.ALERTS, [])}`, "Alerts"),
       ]),
     ),
   );

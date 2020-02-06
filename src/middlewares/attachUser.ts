@@ -3,7 +3,9 @@ import { ContextMessageUpdate } from "telegraf";
 
 export async function attachUser(ctx: ContextMessageUpdate, next: any) {
   if (ctx.from) {
-    incrementUserUsage(ctx);
+    const user = await incrementUserUsage(ctx);
+    //@ts-ignore
+    ctx.user = user;
   }
-  next();
+  return next();
 }

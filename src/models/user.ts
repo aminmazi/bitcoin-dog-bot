@@ -2,6 +2,16 @@ import * as mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
+export interface UserModel extends mongoose.Document {
+  chatId: number;
+  language: string;
+  firstName: string;
+  lastName: string;
+  isBot: boolean;
+  username: string;
+  usage: number;
+}
+
 var UserSchema = new Schema(
   {
     chatId: {
@@ -34,6 +44,6 @@ var UserSchema = new Schema(
   { timestamps: true },
 );
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model<UserModel>("User", UserSchema);
 
 export default User;

@@ -14,10 +14,11 @@ export async function incrementUserUsage(ctx: ContextMessageUpdate) {
         isBot: sender?.is_bot,
         chatId: ctx.chat?.id,
       });
-      await new User(userModel).save();
+      user = await new User(userModel).save();
     } else {
       await user.updateOne({ $inc: { usage: 1 } });
     }
+    return user;
   } catch (error) {
     console.log(error);
   }

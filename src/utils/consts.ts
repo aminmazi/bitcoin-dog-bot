@@ -4,6 +4,7 @@ export const enum COMMANDS {
   PRICE_ALERT = "alert",
   TECHNICAL_ANALYSIS = "ta",
   ADMIN = "admin",
+  LANG = "lang"
 }
 
 export enum CACHE_KEYS {

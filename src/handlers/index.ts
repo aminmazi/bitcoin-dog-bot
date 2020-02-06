@@ -3,6 +3,7 @@ import registerStats from "./stats";
 import registerAlerts from "./alerts";
 import registerTa from "./technical-analysis";
 import registerAdmin from "./admin";
+import registerLang from "./lang";
 import Telegraf, { ContextMessageUpdate } from "telegraf";
 
 export async function registerHandlers(
@@ -16,8 +17,10 @@ export async function registerHandlers(
   await registerAlerts(bot);
 
   await registerTa(bot);
-  
+
   await registerAdmin(bot);
+  
+  await registerLang(bot);
 
   return bot;
 }
