@@ -13,5 +13,5 @@ async function printLangCommand(ctx: ContextMessageUpdate) {
   const lang = ctx.user.language === "fa" ? "en" : "fa";
   await User.updateOne({ chatId: ctx.user.chatId }, { language: lang });
   ctx.user.language = lang;
-  return ctx.replyWithHTML(str(ctx, KEYS.LANG_CHANGED, []));
+  return ctx.replyWithHTML(str(ctx, KEYS.LANG_CHANGED));
 }

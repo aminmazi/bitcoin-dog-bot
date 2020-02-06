@@ -20,8 +20,8 @@ async function printStatsMenu(ctx: ContextMessageUpdate) {
     str(ctx, KEYS.MENU, [COMMANDS.STATS, COMMANDS.TECHNICAL_ANALYSIS]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
-        m.callbackButton(`* ${str(ctx, KEYS.STATS, [])} *`, "Stats"),
-        m.callbackButton(`${str(ctx, KEYS.ALERTS, [])}`, "Alerts"),
+        m.callbackButton(`* ${str(ctx, KEYS.STATS)} *`, "Stats"),
+        m.callbackButton(`${str(ctx, KEYS.ALERTS)}`, "Alerts"),
       ]),
     ),
   );
@@ -33,8 +33,8 @@ async function switchToAlertMenu(ctx: ContextMessageUpdate) {
     str(ctx, KEYS.ALERT_MENU, [COMMANDS.PRICE_ALERT]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
-        m.callbackButton(`${str(ctx, KEYS.STATS, [])}`, "Stats"),
-        m.callbackButton(`* ${str(ctx, KEYS.ALERTS, [])} *`, "Alerts"),
+        m.callbackButton(`${str(ctx, KEYS.STATS)}`, "Stats"),
+        m.callbackButton(`* ${str(ctx, KEYS.ALERTS)} *`, "Alerts"),
       ]),
     ),
   );
@@ -46,8 +46,8 @@ async function switchToStatsMenu(ctx: ContextMessageUpdate) {
     str(ctx, KEYS.STATS_MENU, [COMMANDS.STATS, COMMANDS.TECHNICAL_ANALYSIS]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
-        m.callbackButton(`* ${str(ctx, KEYS.STATS, [])} *`, "Stats"),
-        m.callbackButton(`${str(ctx, KEYS.ALERTS, [])}`, "Alerts"),
+        m.callbackButton(`* ${str(ctx, KEYS.STATS)} *`, "Stats"),
+        m.callbackButton(`${str(ctx, KEYS.ALERTS)}`, "Alerts"),
       ]),
     ),
   );

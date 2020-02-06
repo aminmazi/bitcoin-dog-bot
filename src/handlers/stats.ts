@@ -5,6 +5,7 @@ import {
   getPriceChange,
 } from "../service/blockchainApi";
 import { COMMANDS } from "../utils/consts";
+import { str, KEYS } from "../locals";
 
 export default async function registerStats(
   bot: Telegraf<ContextMessageUpdate>,
@@ -24,15 +25,7 @@ async function printStatsCommand(ctx: ContextMessageUpdate) {
 
   const change = Number((await getPriceChange()).toFixed(2));
 
-  return ctx.replyWithHTML(`<b>💰 Price: $${price} ,
-🇮🇷 ${priceIRT} IRT</b>
-
-<b>📈 24 hours change: ${change >= 0 ? `✅ +${change}` : `🔻 ${change}`}% </b>
-
-${
-  numOfUnconfirmed
-    ? `<b>⏳ Num Of Unconfirmed TXs: ${numOfUnconfirmed.toLocaleString()}</b>`
-    : ""
-}
-`);
+  return ctx.replyWithHTML(
+    str(ctx, KEYS.STATS_COMMAND, [price, priceIRT, change, numOfUnconfirmed]),
+  );
 }
