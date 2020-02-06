@@ -15,8 +15,12 @@ export default async function registerStats(
 async function printStatsCommand(ctx: ContextMessageUpdate) {
   const price = Number((await getPrice("USD")).toFixed(0)).toLocaleString();
   const priceIRT = Number((await getPrice("IRT")).toFixed(0)).toLocaleString();
-
-  const numOfUnconfirmed = await getNumOfUnconfirmed();
+  let numOfUnconfirmed = 0;
+  try {
+    numOfUnconfirmed = await getNumOfUnconfirmed();
+  } catch (error) {
+    console.log(error);
+  }
 
   const change = Number((await getPriceChange()).toFixed(2));
 
@@ -25,5 +29,10 @@ async function printStatsCommand(ctx: ContextMessageUpdate) {
 
 <b>📈 24 hours change: ${change >= 0 ? `✅ +${change}` : `🔻 ${change}`}% </b>
 
-<b>⏳ Num Of Unconfirmed TXs: ${numOfUnconfirmed.toLocaleString()}</b>`);
+${
+  numOfUnconfirmed
+    ? `<b>⏳ Num Of Unconfirmed TXs: ${numOfUnconfirmed.toLocaleString()}</b>`
+    : ""
+}
+`);
 }
