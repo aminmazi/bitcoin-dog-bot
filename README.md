@@ -13,7 +13,7 @@ npm run start:dev
 ```
 
 # 
-### 3d party apis
+### 3d party APIs
 💰 Powered by CoinDesk for price information.
 
 📈 TAAPI for technical analysis data.
