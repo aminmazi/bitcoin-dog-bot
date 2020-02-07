@@ -1,6 +1,8 @@
 import Alert from "../models/alert";
 import { getPriceForCurrency } from "../service/blockchainApi";
 import Telegraf, { ContextMessageUpdate } from "telegraf";
+import { str, KEYS } from "../locals";
+import User from "../models/user";
 
 export default async function watcher(bot: Telegraf<ContextMessageUpdate>) {
   const alerts = await Alert.find({ enabled: true });
@@ -35,11 +37,13 @@ async function sendAlert(
   alert: Alert,
   price: Number,
 ) {
+  //@ts-ignore
+  bot.context.user = (await User.findOne({ chatId: alert.chatId })) || {
+    language: "fa",
+  };
   await bot.telegram.sendMessage(
     alert.chatId,
-    `🚨 Alert! bitcoin price went ${
-      alert.alertUp ? "up" : "down"
-    } to ${price.toLocaleString()} ${alert.currency}`,
+    str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
   );
   await Alert.updateOne(alert, { enabled: false });
 }

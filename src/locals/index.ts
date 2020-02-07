@@ -11,7 +11,8 @@ export enum KEYS {
   LANG_CHANGED,
   STATS_COMMAND,
   ALERT_HELP,
-  ALERT_SET
+  ALERT_SET,
+  ALERT_FIRE
 }
 export function str(ctx: ContextMessageUpdate, name: KEYS, params: any[] = []) {
   switch (ctx.user.language) {

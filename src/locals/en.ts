@@ -62,5 +62,11 @@ for example:</b>
 You'll be notified the first time price goes ${
         params[0] ? "up" : "down"
       } to ${params[1].toLocaleString()} ${params[2]} .</b>`;
+
+    case KEYS.ALERT_FIRE:
+      return `🚨 Alert! 
+bitcoin price went ${
+        params[0].alertUp ? "up" : "down"
+      } to ${params[1].toLocaleString()} ${params[0].currency}`;
   }
 }
