@@ -39,13 +39,13 @@ export function strFa(name: KEYS, params: any[] = []) {
       
 <b>📈 تغییر در ۲۴ ساعت:${
         params[2] >= 0 ? ` %${params[2]}+ ✅` : ` %${params[2]} 🔻`
-      } </b>
+        } </b>
       
 ${
-  params[3]
-    ? `<b>⏳ تراکنش های در صف تایید: ${params[3].toLocaleString()}</b>`
-    : ""
-}`;
+        params[3]
+          ? `<b>⏳ تراکنش های در صف تایید: ${params[3].toLocaleString()}</b>`
+          : ""
+        }`;
 
     case KEYS.ALERT_HELP:
       return `<b>نحوه استفاده:
@@ -62,11 +62,29 @@ ${
       return `<b>هشدار تنظیم شد.
  زمانی که قیمت بیتکوین به مقدار  ${params[1].toLocaleString()} ${params[2]} ${
         params[0] ? "صعود کند" : "سقوط کند"
-      }، شما هشدار دریافت خواهید کرد.</b>`;
+        }، شما هشدار دریافت خواهید کرد.</b>`;
 
     case KEYS.ALERT_FIRE:
       return ` 🚨
 قیمت بیتکوین به مقدار ${params[1].toLocaleString()} ${params[0].currency}
 ${params[0].alertUp ? "افزایش" : "کاهش"} یافت.`;
+
+    case KEYS.BUY:
+      return `بخرید 📈`;
+
+    case KEYS.NEUTRAL:
+      return `خنثی 📊`;
+
+    case KEYS.SELL:
+      return `بفروشید 📉`;
+
+    case KEYS.STRONG_BUY:
+      return `هرچه سریعتر بخرید 📈`;
+
+    case KEYS.STRONG_SELL:
+      return `هرچه سریع تر بفروشید 📉`;
+
+    case KEYS.RSI_MESSAGE:
+      return `تحلیل RSI : ${params[0]} (${params[1]})`;
   }
 }

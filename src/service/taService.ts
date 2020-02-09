@@ -2,6 +2,8 @@ import taapi from "taapi";
 import env from "../utils/env";
 import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
+import { str, KEYS } from "../locals";
+import { ContextMessageUpdate } from "telegraf/typings";
 
 export interface RsiResult {
   rsi: number;
@@ -59,17 +61,17 @@ function generateSuggestionFromRsi(rsi: number) {
   }
 }
 
-export function getSuggestionString(sug: SUGGESTION) {
+export function getSuggestionString(ctx: ContextMessageUpdate, sug: SUGGESTION) {
   switch (sug) {
     case SUGGESTION.BUY:
-      return "Buy";
+      return str(ctx, KEYS.BUY);
     case SUGGESTION.NEUTRAL:
-      return "Neutral";
+      return str(ctx, KEYS.NEUTRAL);
     case SUGGESTION.SELL:
-      return "Sell";
+      return str(ctx, KEYS.SELL);
     case SUGGESTION.STRONG_BUY:
-      return "Strong Buy";
+      return str(ctx, KEYS.STRONG_BUY);
     case SUGGESTION.STRONG_SELL:
-      return "Strong Sell";
+      return str(ctx, KEYS.STRONG_SELL);
   }
 }

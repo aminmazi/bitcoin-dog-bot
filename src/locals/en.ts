@@ -39,13 +39,13 @@ export function strEn(name: KEYS, params: any[] = []) {
       
 <b>📈 24 hours change: ${
         params[2] >= 0 ? `✅ +${params[2]}` : `🔻 ${params[2]}`
-      }% </b>
+        }% </b>
       
 ${
-  params[3]
-    ? `<b>⏳ Num Of Unconfirmed TXs: ${params[3].toLocaleString()}</b>`
-    : ""
-}`;
+        params[3]
+          ? `<b>⏳ Num Of Unconfirmed TXs: ${params[3].toLocaleString()}</b>`
+          : ""
+        }`;
 
     case KEYS.ALERT_HELP:
       return `<b>Usage template: /alert [value] [currency]
@@ -61,12 +61,30 @@ for example:</b>
       return `<b>Alarm has been set.
 You'll be notified the first time price goes ${
         params[0] ? "up" : "down"
-      } to ${params[1].toLocaleString()} ${params[2]} .</b>`;
+        } to ${params[1].toLocaleString()} ${params[2]} .</b>`;
 
     case KEYS.ALERT_FIRE:
       return `🚨 
 bitcoin price went ${
         params[0].alertUp ? "up" : "down"
-      } to ${params[1].toLocaleString()} ${params[0].currency}`;
+        } to ${params[1].toLocaleString()} ${params[0].currency}`;
+
+    case KEYS.BUY:
+      return `Buy`;
+
+    case KEYS.NEUTRAL:
+      return `Neutral`;
+
+    case KEYS.SELL:
+      return `Sell`;
+
+    case KEYS.STRONG_BUY:
+      return `Strong Buy`;
+
+    case KEYS.STRONG_SELL:
+      return `Strong Sell`;
+
+    case KEYS.RSI_MESSAGE:
+      return `RSI : ${params[0]} (${params[1]})`;
   }
 }

@@ -12,7 +12,13 @@ export enum KEYS {
   STATS_COMMAND,
   ALERT_HELP,
   ALERT_SET,
-  ALERT_FIRE
+  ALERT_FIRE,
+  BUY,
+  NEUTRAL,
+  SELL,
+  STRONG_BUY,
+  STRONG_SELL,
+  RSI_MESSAGE
 }
 export function str(ctx: ContextMessageUpdate, name: KEYS, params: any[] = []) {
   switch (ctx.user.language) {
