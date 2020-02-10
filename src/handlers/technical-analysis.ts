@@ -1,7 +1,12 @@
 import Telegraf, { ContextMessageUpdate } from "telegraf";
 import { getRSI, getSuggestionString } from "../service/taService";
-const Extra = require("telegraf/extra");
+import Extra from "telegraf/extra";
 import { str, KEYS } from "../locals";
+
+interface TaResult {
+  value: string;
+  suggestion: string;
+}
 
 export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
   const regex = new RegExp(/ta_\w+/g);
@@ -10,16 +15,13 @@ export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
   );
   bot.action(regex, async (ctx: ContextMessageUpdate) => {
     await ctx.answerCbQuery();
+
     const interval = ctx.match?.input?.includes("_")
       ? ctx.match?.input?.split("_")[1]
       : "1h";
-    const rsiResult = await getRSI(interval);
+
     await ctx.editMessageText(
-      str(ctx, KEYS.RSI_MESSAGE, [
-        rsiResult.rsi?.toFixed(0),
-        getSuggestionString(ctx, rsiResult.suggestion),
-        interval,
-      ]),
+      str(ctx, KEYS.TA_MESSAGE, await getTas(ctx, interval)),
       Extra.HTML().markup((m: any) =>
         m.inlineKeyboard([
           [
@@ -46,18 +48,12 @@ export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
         ]),
       ),
     );
-    // taCommandFunction(ctx, interval);
   });
 }
 
 async function taCommandFunction(ctx: ContextMessageUpdate, interval: string) {
-  const rsiResult = await getRSI(interval);
   return ctx.reply(
-    str(ctx, KEYS.RSI_MESSAGE, [
-      rsiResult.rsi?.toFixed(0),
-      getSuggestionString(ctx, rsiResult.suggestion),
-      interval,
-    ]),
+    str(ctx, KEYS.TA_MESSAGE, await getTas(ctx, interval)),
     Extra.HTML().markup((m: any) =>
       m.inlineKeyboard([
         [
@@ -84,4 +80,25 @@ async function taCommandFunction(ctx: ContextMessageUpdate, interval: string) {
       ]),
     ),
   );
+}
+
+async function getTas(ctx: ContextMessageUpdate, interval: string) {
+  let sum = 0;
+
+  //get RSI
+  const rsiResult = await getRSI(interval);
+  sum += rsiResult.suggestion;
+
+  const taResults: TaResult[] = [
+    //convert RSI to human readable object
+    {
+      value: rsiResult.rsi.toFixed(0),
+      suggestion: getSuggestionString(ctx, rsiResult.suggestion),
+    },
+  ];
+
+  //compute average for overall suggestion
+  const average = getSuggestionString(ctx, Math.round(sum / taResults.length));
+
+  return [taResults, interval, average];
 }

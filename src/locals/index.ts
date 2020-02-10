@@ -18,7 +18,7 @@ export enum KEYS {
   SELL,
   STRONG_BUY,
   STRONG_SELL,
-  RSI_MESSAGE
+  TA_MESSAGE
 }
 export function str(ctx: ContextMessageUpdate, name: KEYS, params: any[] = []) {
   switch (ctx.user.language) {
