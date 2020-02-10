@@ -12,8 +12,8 @@ export default async function registerAdmin(
 
 async function printAdminCommand(ctx: ContextMessageUpdate) {
   if (ctx.chat && env.ADMINS.includes(ctx.chat?.id.toString())) {
-    const userCount = await User.count({});
-    const activeAlerts = await Alert.count({ enabled: true });
+    const userCount = await User.countDocuments({});
+    const activeAlerts = await Alert.countDocuments({ enabled: true });
     return ctx.replyWithHTML(`<b>Users: ${userCount}</b>
 <b>Alerts: ${activeAlerts}</b>`);
   }
