@@ -14,8 +14,6 @@ export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
     taCommandFunction(ctx, "1h"),
   );
   bot.action(regex, async (ctx: ContextMessageUpdate) => {
-    await ctx.answerCbQuery();
-
     const interval = ctx.match?.input?.includes("_")
       ? ctx.match?.input?.split("_")[1]
       : "1h";
@@ -48,6 +46,7 @@ export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
         ]),
       ),
     );
+    await ctx.answerCbQuery();
   });
 }
 
