@@ -39,10 +39,9 @@ export async function getRSI(interval: string): Promise<RsiResult> {
     } catch (error) {
       console.log("error in taapi", error);
     }
-    if (!result.value) result = { value: 50 };
     rsiResult = {
-      rsi: result.value,
-      suggestion: generateSuggestionFromRsi(result.value),
+      rsi: result.value || 50,
+      suggestion: generateSuggestionFromRsi(result.value || 50),
     };
     cache?.set(
       `${CACHE_KEYS.TA_RSI}_${interval}`,
@@ -60,9 +59,9 @@ export async function getStoch(interval: string): Promise<StochResult> {
   );
   if (!stochResult) {
     const client = taapi.client(env.TAAPI);
-    let result;
+    let result: StochResult["result"] = { valueSlowD: 50, valueSlowK: 50 };
     try {
-      result = await client.getIndicator(
+      result = (await client.getIndicator(
         "stoch",
         "binance",
         "BTC/USDT",
@@ -70,10 +69,12 @@ export async function getStoch(interval: string): Promise<StochResult> {
         {
           optInSlowK_Period: 14,
         },
-      );
+      )) || { valueSlowD: 50, valueSlowK: 50 };
     } catch (error) {
       console.log("error in taapi", error);
     }
+    if (!result.valueSlowD || !result.valueSlowK)
+      result = { valueSlowD: 50, valueSlowK: 50 };
     stochResult = {
       result,
       suggestion: generateSuggestionFromStoch(result),
