@@ -89,6 +89,8 @@ bitcoin price went ${
 
 <b>RSI : ${params[0][0].value} - ${params[0][0].suggestion}</b>
 
+<b>Stochastic : ${params[0][1].value} - ${params[0][1].suggestion}</b>
+
 <b>Overall suggestion: ${params[2]}</b>`;
   }
 }

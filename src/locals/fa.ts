@@ -89,6 +89,8 @@ ${params[0].alertUp ? "افزایش" : "کاهش"} یافت.`;
 
 <b>شاخص (RSI): ${params[0][0].value} - ${params[0][0].suggestion}</b>
 
+<b>شاخص (Stochastic): ${params[0][1].value} - ${params[0][1].suggestion}</b>
+
 <b>تحلیل کلی: ${params[2]}</b>`;
   }
 }

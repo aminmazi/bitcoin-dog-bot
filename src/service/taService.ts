@@ -10,6 +10,11 @@ export interface RsiResult {
   suggestion: SUGGESTION;
 }
 
+export interface StochResult {
+  result: { valueSlowK: number; valueSlowD: number };
+  suggestion: SUGGESTION;
+}
+
 export enum SUGGESTION {
   STRONG_SELL = 4,
   SELL = 3,
@@ -39,9 +44,47 @@ export async function getRSI(interval: string): Promise<RsiResult> {
       rsi: result.value,
       suggestion: generateSuggestionFromRsi(result.value),
     };
-    cache?.set(`${CACHE_KEYS.TA_RSI}_${interval}`, rsiResult, env.TAAPI_CACHE_INTERVAL);
+    cache?.set(
+      `${CACHE_KEYS.TA_RSI}_${interval}`,
+      rsiResult,
+      env.TAAPI_CACHE_INTERVAL,
+    );
   }
   return rsiResult;
+}
+
+export async function getStoch(interval: string): Promise<StochResult> {
+  //first check the cache
+  let stochResult = cache?.get<StochResult>(
+    `${CACHE_KEYS.TA_STOCH}_${interval}`,
+  );
+  if (!stochResult) {
+    const client = taapi.client(env.TAAPI);
+    let result;
+    try {
+      result = await client.getIndicator(
+        "stoch",
+        "binance",
+        "BTC/USDT",
+        interval,
+        {
+          optInSlowK_Period: 14,
+        },
+      );
+    } catch (error) {
+      console.log("error in taapi", error);
+    }
+    stochResult = {
+      result,
+      suggestion: generateSuggestionFromStoch(result),
+    };
+    cache?.set(
+      `${CACHE_KEYS.TA_STOCH}_${interval}`,
+      stochResult,
+      env.TAAPI_CACHE_INTERVAL,
+    );
+  }
+  return stochResult;
 }
 
 function generateSuggestionFromRsi(rsi: number) {
@@ -61,7 +104,26 @@ function generateSuggestionFromRsi(rsi: number) {
   }
 }
 
-export function getSuggestionString(ctx: ContextMessageUpdate, sug: SUGGESTION) {
+function generateSuggestionFromStoch(result: StochResult["result"]) {
+  const { valueSlowD, valueSlowK } = result;
+  switch (true) {
+    case valueSlowD <= 20 && valueSlowK <= 20 && valueSlowK > valueSlowD:
+      return SUGGESTION.STRONG_BUY;
+    case valueSlowD >= 80 && valueSlowK >= 80 && valueSlowK < valueSlowD:
+      return SUGGESTION.STRONG_SELL;
+    case valueSlowD <= 80 && valueSlowK >= 20 && valueSlowK > valueSlowD:
+      return SUGGESTION.BUY;
+    case valueSlowD <= 80 && valueSlowK >= 20 && valueSlowK < valueSlowD:
+      return SUGGESTION.SELL;
+    default:
+      return SUGGESTION.NEUTRAL;
+  }
+}
+
+export function getSuggestionString(
+  ctx: ContextMessageUpdate,
+  sug: SUGGESTION,
+) {
   switch (sug) {
     case SUGGESTION.BUY:
       return str(ctx, KEYS.BUY);

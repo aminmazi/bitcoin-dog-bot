@@ -1,5 +1,5 @@
 import Telegraf, { ContextMessageUpdate } from "telegraf";
-import { getRSI, getSuggestionString } from "../service/taService";
+import { getRSI, getSuggestionString, getStoch } from "../service/taService";
 import Extra from "telegraf/extra";
 import { str, KEYS } from "../locals";
 
@@ -88,11 +88,20 @@ async function getTas(ctx: ContextMessageUpdate, interval: string) {
   const rsiResult = await getRSI(interval);
   sum += rsiResult.suggestion;
 
+  //get Stoch
+  const stochResult = await getStoch(interval);
+  sum += stochResult.suggestion;
+
   const taResults: TaResult[] = [
     //convert RSI to human readable object
     {
       value: rsiResult.rsi.toFixed(0),
       suggestion: getSuggestionString(ctx, rsiResult.suggestion),
+    },
+    //convert stoch to human readable object
+    {
+      value: `${stochResult.result.valueSlowD.toFixed(2)},${stochResult.result.valueSlowK.toFixed(2)}`,
+      suggestion: getSuggestionString(ctx, stochResult.suggestion),
     },
   ];
 

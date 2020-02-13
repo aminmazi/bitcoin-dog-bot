@@ -54,7 +54,9 @@ async function main() {
   // const client = taapi.client(env.TAAPI);
   // let result;
   // try {
-  //   result = await client.getIndicator("macd", "binance", "BTC/USDT", "1h");
+  //   result = await client.getIndicator("stoch", "binance", "BTC/USDT", "1h", {
+  //     optInSlowK_Period: 14,
+  //   });
   // } catch (error) {
   //   console.log("error in taapi", error);
   // }
