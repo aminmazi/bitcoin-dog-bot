@@ -13,13 +13,14 @@ export default async function registerAlerts(
 async function printAlertUpCommand(ctx: ContextMessageUpdate) {
   const priceInUsd = Number((await getPrice("USD")).toFixed(0));
   const priceInIRT = Number((await getPrice("IRT")).toFixed(0));
-  const params = ctx.message?.text?.split(" ");
+  let params = ctx.message?.text?.split(" ");
   //check for incorrect usage
-  if (!params || params?.length < 3) {
+  if (!params || params?.length < 2) {
     return ctx.replyWithHTML(
       str(ctx, KEYS.ALERT_HELP, [priceInUsd, priceInIRT]),
     );
   }
+  if (params.length == 2) params[2] = "USD";
   const to = Number(params[1]);
   const currency = params[2].toUpperCase();
   const alertUp = await getAlertTypeForCurrency(currency, to);
