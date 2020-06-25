@@ -1,12 +1,18 @@
 import * as mongoose from "mongoose";
 
+export enum ALERT_TYPES {
+  PRICE = "PRICE",
+  MEMPOOL = "MEMPOOL",
+}
+
 interface Alert extends mongoose.Document {
-  currency: string;
-  alertUp: any;
-  from: number;
+  currency?: string;
+  alertUp?: any;
+  from?: number;
   to: number;
   chatId: number;
-  enabled: boolean;
+  enabled?: boolean;
+  type: ALERT_TYPES;
 }
 
 const Schema = mongoose.Schema;
@@ -19,7 +25,6 @@ var AlertSchema = new Schema(
     },
     from: {
       type: Number,
-      required: "Enter from",
     },
     to: {
       type: Number,
@@ -36,6 +41,12 @@ var AlertSchema = new Schema(
     enabled: {
       type: Boolean,
       default: true,
+      index: true,
+    },
+    type: {
+      type: String,
+      enum: [ALERT_TYPES.PRICE, ALERT_TYPES.MEMPOOL],
+      default: ALERT_TYPES.PRICE,
       index: true,
     },
   },

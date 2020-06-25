@@ -1,8 +1,8 @@
 import User from "../models/user";
-import { ContextMessageUpdate } from "telegraf";
+import { TelegrafContext } from "telegraf/typings/context";
 
 // Get or create User
-export async function incrementUserUsage(ctx: ContextMessageUpdate) {
+export async function incrementUserUsage(ctx: TelegrafContext) {
   try {
     const sender = ctx.from;
     let user = await User.findOne({ chatId: ctx.chat?.id });

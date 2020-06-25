@@ -1,19 +1,20 @@
-import Telegraf, { ContextMessageUpdate } from "telegraf";
+import Telegraf from "telegraf";
 import { getRSI, getSuggestionString, getStoch } from "../service/taService";
 import Extra from "telegraf/extra";
 import { str, KEYS } from "../locals";
+import { TelegrafContext } from "telegraf/typings/context";
 
 interface TaResult {
   value: string;
   suggestion: string;
 }
 
-export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
+export default async function registerTa(bot: Telegraf<TelegrafContext>) {
   const regex = new RegExp(/ta_\w+/g);
-  bot.command("/ta", (ctx: ContextMessageUpdate) =>
+  bot.command("/ta", (ctx: TelegrafContext) =>
     taCommandFunction(ctx, "1h"),
   );
-  bot.action(regex, async (ctx: ContextMessageUpdate) => {
+  bot.action(regex, async (ctx: TelegrafContext) => {
     const interval = ctx.match?.input?.includes("_")
       ? ctx.match?.input?.split("_")[1]
       : "1h";
@@ -50,7 +51,7 @@ export default async function registerTa(bot: Telegraf<ContextMessageUpdate>) {
   });
 }
 
-async function taCommandFunction(ctx: ContextMessageUpdate, interval: string) {
+async function taCommandFunction(ctx: TelegrafContext, interval: string) {
   return ctx.reply(
     str(ctx, KEYS.TA_MESSAGE, await getTas(ctx, interval)),
     Extra.HTML().markup((m: any) =>
@@ -81,7 +82,7 @@ async function taCommandFunction(ctx: ContextMessageUpdate, interval: string) {
   );
 }
 
-async function getTas(ctx: ContextMessageUpdate, interval: string) {
+async function getTas(ctx: TelegrafContext, interval: string) {
   let sum = 0;
 
   //get RSI

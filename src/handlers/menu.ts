@@ -1,10 +1,9 @@
-import Telegraf, { ContextMessageUpdate, Extra, Markup } from "telegraf";
+import Telegraf, { Extra, Markup } from "telegraf";
 import { COMMANDS } from "../utils/consts";
 import { str, KEYS } from "../locals";
+import { TelegrafContext } from "telegraf/typings/context";
 
-export default async function registerMenu(
-  bot: Telegraf<ContextMessageUpdate>,
-) {
+export default async function registerMenu(bot: Telegraf<TelegrafContext>) {
   //start commands prints the menu
   bot.start(printStatsMenu);
   bot.command(COMMANDS.MENU, printStatsMenu);
@@ -15,7 +14,7 @@ export default async function registerMenu(
   //register Stats Menu action
   bot.action("Stats", switchToStatsMenu);
 }
-async function printStatsMenu(ctx: ContextMessageUpdate) {
+async function printStatsMenu(ctx: TelegrafContext) {
   return ctx.reply(
     str(ctx, KEYS.MENU, [COMMANDS.STATS, COMMANDS.TECHNICAL_ANALYSIS]),
     Extra.HTML().markup((m: any) =>
@@ -27,10 +26,10 @@ async function printStatsMenu(ctx: ContextMessageUpdate) {
   );
 }
 
-async function switchToAlertMenu(ctx: ContextMessageUpdate) {
+async function switchToAlertMenu(ctx: TelegrafContext) {
   await ctx.answerCbQuery();
   await ctx.editMessageText(
-    str(ctx, KEYS.ALERT_MENU, [COMMANDS.PRICE_ALERT]),
+    str(ctx, KEYS.ALERT_MENU, [COMMANDS.PRICE_ALERT, COMMANDS.MEMPOOL_ALERT]),
     Extra.HTML().markup((m: any) =>
       Markup.inlineKeyboard([
         m.callbackButton(`${str(ctx, KEYS.STATS)}`, "Stats"),
@@ -40,7 +39,7 @@ async function switchToAlertMenu(ctx: ContextMessageUpdate) {
   );
 }
 
-async function switchToStatsMenu(ctx: ContextMessageUpdate) {
+async function switchToStatsMenu(ctx: TelegrafContext) {
   await ctx.answerCbQuery();
   await ctx.editMessageText(
     str(ctx, KEYS.STATS_MENU, [COMMANDS.STATS, COMMANDS.TECHNICAL_ANALYSIS]),

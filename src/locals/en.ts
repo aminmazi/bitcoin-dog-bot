@@ -14,7 +14,9 @@ export function strEn(name: KEYS, params: any[] = []) {
       return `<strong>Alerts 🔔</strong>
 <b>You can set an alert and we will send you a message when an alert is triggered.</b>
       
-<i>/${params[0]} 📈 → Notify me when bitcoin price crosses a specified value </i>`;
+<i>/${params[0]} 📈 → Notify me when bitcoin price crosses a specified value </i>
+
+<i>/${params[1]} 🏦 → Notify me when unconfirmed transactions are less than a specified value </i>`;
 
     case KEYS.STATS_MENU:
       return `<strong>Stats ℹ️</strong>
@@ -57,17 +59,33 @@ for example:</b>
   
 <b>Enter a price above/below the current bitcoin price and you'll receive an alert the first time bitcoin cross this number!</b>`;
 
+    case KEYS.MEMPOOL_ALERT_HELP:
+      return `<b>Usage template: /alert_mempool [value]
+for example:</b>
+
+<b>/alert_mempool 2000</b>
+  
+<b>it will inform you when number of unconfirmed transactions is less than 2000</b>`;
+
     case KEYS.ALERT_SET:
       return `<b>Alarm has been set.
 You'll be notified the first time price goes ${
         params[0] ? "up" : "down"
       } to ${params[1].toLocaleString()} ${params[2]} .</b>`;
 
+    case KEYS.MEMPOOL_ALERT_SET:
+      return `<b>Alarm has been set.
+You'll be notified the first time number of mempool txs goes down to ${params[0].toLocaleString()} .</b>`;
+
     case KEYS.ALERT_FIRE:
       return `🚨 
 bitcoin price went ${
         params[0].alertUp ? "up" : "down"
       } to ${params[1].toLocaleString()} ${params[0].currency}`;
+
+    case KEYS.MEMPOOL_ALERT_FIRE:
+      return `🚨 
+unconfirmed transactions number went down to ${params[0].toLocaleString()}`;
 
     case KEYS.BUY:
       return `Buy 🟢`;

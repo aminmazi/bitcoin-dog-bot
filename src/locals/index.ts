@@ -1,6 +1,6 @@
-import { ContextMessageUpdate } from "telegraf/typings";
 import { strEn } from "./en";
 import { strFa } from "./fa";
+import { TelegrafContext } from "telegraf/typings/context";
 
 export enum KEYS {
   MENU,
@@ -18,9 +18,12 @@ export enum KEYS {
   SELL,
   STRONG_BUY,
   STRONG_SELL,
-  TA_MESSAGE
+  TA_MESSAGE,
+  MEMPOOL_ALERT_HELP,
+  MEMPOOL_ALERT_SET,
+  MEMPOOL_ALERT_FIRE,
 }
-export function str(ctx: ContextMessageUpdate, name: KEYS, params: any[] = []) {
+export function str(ctx: TelegrafContext, name: KEYS, params: any[] = []) {
   switch (ctx.user.language) {
     case "en":
       return strEn(name, params);

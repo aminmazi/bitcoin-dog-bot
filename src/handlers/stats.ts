@@ -1,4 +1,4 @@
-import Telegraf, { ContextMessageUpdate } from "telegraf";
+import Telegraf from "telegraf";
 import {
   getPrice,
   getNumOfUnconfirmed,
@@ -6,14 +6,13 @@ import {
 } from "../service/blockchainApi";
 import { COMMANDS } from "../utils/consts";
 import { str, KEYS } from "../locals";
+import { TelegrafContext } from "telegraf/typings/context";
 
-export default async function registerStats(
-  bot: Telegraf<ContextMessageUpdate>,
-) {
+export default async function registerStats(bot: Telegraf<TelegrafContext>) {
   bot.command(COMMANDS.STATS, printStatsCommand);
 }
 
-async function printStatsCommand(ctx: ContextMessageUpdate) {
+async function printStatsCommand(ctx: TelegrafContext) {
   const price = Number((await getPrice("USD")).toFixed(0)).toLocaleString();
   const priceIRT = Number((await getPrice("IRT")).toFixed(0)).toLocaleString();
   let numOfUnconfirmed = 0;

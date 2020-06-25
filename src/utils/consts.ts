@@ -2,6 +2,7 @@ export const enum COMMANDS {
   MENU = "menu",
   STATS = "stats",
   PRICE_ALERT = "alert",
+  MEMPOOL_ALERT = "alert_mempool",
   TECHNICAL_ANALYSIS = "ta",
   ADMIN = "admin",
   LANG = "lang"

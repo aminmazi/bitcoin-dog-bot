@@ -4,11 +4,12 @@ import registerAlerts from "./alerts";
 import registerTa from "./technical-analysis";
 import registerAdmin from "./admin";
 import registerLang from "./lang";
-import Telegraf, { ContextMessageUpdate } from "telegraf";
+import { TelegrafContext } from "telegraf/typings/context";
+import Telegraf from "telegraf";
 
 export async function registerHandlers(
-  bot: Telegraf<ContextMessageUpdate>,
-): Promise<Telegraf<ContextMessageUpdate>> {
+  bot: Telegraf<TelegrafContext>,
+): Promise<Telegraf<TelegrafContext>> {
   //start command handler
   await registerMenu(bot);
   // price command

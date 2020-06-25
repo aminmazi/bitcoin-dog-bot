@@ -3,7 +3,7 @@ import env from "../utils/env";
 import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
 import { str, KEYS } from "../locals";
-import { ContextMessageUpdate } from "telegraf/typings";
+import { TelegrafContext } from "telegraf/typings/context";
 
 export interface RsiResult {
   rsi: number;
@@ -122,7 +122,7 @@ function generateSuggestionFromStoch(result: StochResult["result"]) {
 }
 
 export function getSuggestionString(
-  ctx: ContextMessageUpdate,
+  ctx: TelegrafContext,
   sug: SUGGESTION,
 ) {
   switch (sug) {

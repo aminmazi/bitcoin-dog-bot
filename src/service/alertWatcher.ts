@@ -1,20 +1,27 @@
-import Alert from "../models/alert";
-import { getPriceForCurrency } from "../service/blockchainApi";
-import Telegraf, { ContextMessageUpdate } from "telegraf";
+import Alert, { ALERT_TYPES } from "../models/alert";
+import {
+  getPriceForCurrency,
+  getNumOfUnconfirmed,
+} from "../service/blockchainApi";
 import { str, KEYS } from "../locals";
 import User from "../models/user";
+import { TelegrafContext } from "telegraf/typings/context";
+import Telegraf from "telegraf";
 
-export default async function watcher(bot: Telegraf<ContextMessageUpdate>) {
-  const alerts = await Alert.find({ enabled: true });
+export default async function watcher(bot: Telegraf<TelegrafContext>) {
+  const priceAlerts = await Alert.find({
+    enabled: true,
+    $or: [{ type: ALERT_TYPES.PRICE }, { type: { $exists: false } }],
+  });
   console.log(
-    `watcher service started another round with ${alerts.length} enabled alerts`,
+    `watcher service started another round for price alerts with ${priceAlerts.length} enabled alerts`,
   );
-  alerts.forEach(async function(alert) {
-    const price = await getPriceForCurrency(alert.currency);
+  priceAlerts.forEach(async function (alert) {
+    const price = await getPriceForCurrency(alert.currency || "BTC");
     if (alert.alertUp) {
       if (alert.to <= price) {
         // send alert to user
-        await sendAlert(bot, alert, price);
+        await sendPriceAlert(bot, alert, price);
         return;
       }
     }
@@ -22,18 +29,33 @@ export default async function watcher(bot: Telegraf<ContextMessageUpdate>) {
     else {
       if (alert.to >= price) {
         // send alert to user
-        await sendAlert(bot, alert, price);
+        await sendPriceAlert(bot, alert, price);
         return;
       }
     }
   });
-  setTimeout(async function() {
+  // mempool alerts
+  const memPoolAlerts = await Alert.find({
+    enabled: true,
+    type: ALERT_TYPES.MEMPOOL,
+  });
+  console.log(
+    `watcher service started another round for mempool alerts with ${memPoolAlerts.length} enabled alerts`,
+  );
+  memPoolAlerts.forEach(async function (alert) {
+    const unconfirmedNum = await getNumOfUnconfirmed();
+    if (alert.to > unconfirmedNum) {
+      await sendMempoolAlert(bot, alert, unconfirmedNum);
+      return;
+    }
+  });
+  setTimeout(async function () {
     await watcher(bot);
   }, 60000);
 }
 
-async function sendAlert(
-  bot: Telegraf<ContextMessageUpdate>,
+async function sendPriceAlert(
+  bot: Telegraf<TelegrafContext>,
   alert: Alert,
   price: Number,
 ) {
@@ -42,8 +64,22 @@ async function sendAlert(
     language: "fa",
   };
   await bot.telegram.sendMessage(
-    alert.chatId,
+    alert.chatId || 0,
     str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
+  );
+  await Alert.updateOne(alert, { enabled: false });
+}
+
+async function sendMempoolAlert(
+  bot: Telegraf<TelegrafContext>,
+  alert: Alert,
+  num: Number,
+) {
+  //@ts-ignore
+  bot.context.user = await User.findOne({ chatId: alert.chatId });
+  await bot.telegram.sendMessage(
+    alert.chatId || 0,
+    str(bot.context, KEYS.MEMPOOL_ALERT_FIRE, [num]),
   );
   await Alert.updateOne(alert, { enabled: false });
 }
