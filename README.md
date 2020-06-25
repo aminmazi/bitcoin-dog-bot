@@ -1,6 +1,14 @@
 # bitcoin-dog-bot
 *Telegram bot for Bitcoin* 
 
+✅ Price and blockchain stats
+
+✅ Price alerts
+
+✅ Mempool alerts
+
+✅ Technical analysis for bitcoin traders
+
 
 ### Use this bot
 https://t.me/bitcoin_dog_bot
