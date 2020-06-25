@@ -9,6 +9,7 @@
 
 ✅ Technical analysis for bitcoin traders
 
+#
 
 ### Use this bot
 https://t.me/bitcoin_dog_bot
