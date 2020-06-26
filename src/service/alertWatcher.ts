@@ -67,7 +67,7 @@ async function sendPriceAlert(
     alert.chatId || 0,
     str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
   );
-  await Alert.updateOne(alert, { enabled: false });
+  await alert.updateOne({ enabled: false });
 }
 
 async function sendMempoolAlert(
@@ -81,5 +81,5 @@ async function sendMempoolAlert(
     alert.chatId || 0,
     str(bot.context, KEYS.MEMPOOL_ALERT_FIRE, [num]),
   );
-  await Alert.updateOne(alert, { enabled: false });
+  await alert.updateOne({ enabled: false });
 }
