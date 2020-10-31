@@ -63,11 +63,16 @@ async function sendPriceAlert(
   bot.context.user = (await User.findOne({ chatId: alert.chatId })) || {
     language: "fa",
   };
-  await bot.telegram.sendMessage(
-    alert.chatId || 0,
-    str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
-  );
-  await alert.updateOne({ enabled: false });
+  try {
+    await bot.telegram.sendMessage(
+      alert.chatId || 0,
+      str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
+    );
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await alert.updateOne({ enabled: false });
+  }
 }
 
 async function sendMempoolAlert(
@@ -77,9 +82,14 @@ async function sendMempoolAlert(
 ) {
   //@ts-ignore
   bot.context.user = await User.findOne({ chatId: alert.chatId });
-  await bot.telegram.sendMessage(
-    alert.chatId || 0,
-    str(bot.context, KEYS.MEMPOOL_ALERT_FIRE, [num]),
-  );
-  await alert.updateOne({ enabled: false });
+  try {
+    await bot.telegram.sendMessage(
+      alert.chatId || 0,
+      str(bot.context, KEYS.MEMPOOL_ALERT_FIRE, [num]),
+    );
+  } catch (error) {
+    console.log(error);
+  } finally {
+    await alert.updateOne({ enabled: false });
+  }
 }
