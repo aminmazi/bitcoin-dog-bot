@@ -20,6 +20,6 @@ export async function incrementUserUsage(ctx: TelegrafContext) {
     }
     return user;
   } catch (error) {
-    console.log(error);
+    ctx.logger.info(error);
   }
 }

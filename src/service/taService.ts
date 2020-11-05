@@ -4,7 +4,7 @@ import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
 import { str, KEYS } from "../locals";
 import { TelegrafContext } from "telegraf/typings/context";
-
+import { Logger } from "winston";
 export interface RsiResult {
   rsi: number;
   suggestion: SUGGESTION;
@@ -23,7 +23,10 @@ export enum SUGGESTION {
   STRONG_BUY = 0,
 }
 
-export async function getRSI(interval: string): Promise<RsiResult> {
+export async function getRSI(
+  interval: string,
+  logger: Logger,
+): Promise<RsiResult> {
   //first check the cache
   let rsiResult = cache?.get<RsiResult>(`${CACHE_KEYS.TA_RSI}_${interval}`);
   if (!rsiResult) {
@@ -37,7 +40,7 @@ export async function getRSI(interval: string): Promise<RsiResult> {
         interval,
       );
     } catch (error) {
-      console.log("error in taapi", error);
+      logger.error("error in taapi", error);
     }
     rsiResult = {
       rsi: result.value || 50,
@@ -52,7 +55,10 @@ export async function getRSI(interval: string): Promise<RsiResult> {
   return rsiResult;
 }
 
-export async function getStoch(interval: string): Promise<StochResult> {
+export async function getStoch(
+  interval: string,
+  logger: Logger,
+): Promise<StochResult> {
   //first check the cache
   let stochResult = cache?.get<StochResult>(
     `${CACHE_KEYS.TA_STOCH}_${interval}`,
@@ -71,7 +77,7 @@ export async function getStoch(interval: string): Promise<StochResult> {
         },
       )) || { valueSlowD: 50, valueSlowK: 50 };
     } catch (error) {
-      console.log("error in taapi", error);
+      logger.error("error in taapi", error);
     }
     if (!result.valueSlowD || !result.valueSlowK)
       result = { valueSlowD: 50, valueSlowK: 50 };
@@ -121,10 +127,7 @@ function generateSuggestionFromStoch(result: StochResult["result"]) {
   }
 }
 
-export function getSuggestionString(
-  ctx: TelegrafContext,
-  sug: SUGGESTION,
-) {
+export function getSuggestionString(ctx: TelegrafContext, sug: SUGGESTION) {
   switch (sug) {
     case SUGGESTION.BUY:
       return str(ctx, KEYS.BUY);

@@ -19,7 +19,7 @@ async function printStatsCommand(ctx: TelegrafContext) {
   try {
     numOfUnconfirmed = await getNumOfUnconfirmed();
   } catch (error) {
-    console.log(error);
+    ctx.logger.error(error);
   }
 
   const change = Number((await getPriceChange()).toFixed(2));

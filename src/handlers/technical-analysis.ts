@@ -11,9 +11,7 @@ interface TaResult {
 
 export default async function registerTa(bot: Telegraf<TelegrafContext>) {
   const regex = new RegExp(/ta_\w+/g);
-  bot.command("/ta", (ctx: TelegrafContext) =>
-    taCommandFunction(ctx, "1h"),
-  );
+  bot.command("/ta", (ctx: TelegrafContext) => taCommandFunction(ctx, "1h"));
   bot.action(regex, async (ctx: TelegrafContext) => {
     const interval = ctx.match?.input?.includes("_")
       ? ctx.match?.input?.split("_")[1]
@@ -86,11 +84,11 @@ async function getTas(ctx: TelegrafContext, interval: string) {
   let sum = 0;
 
   //get RSI
-  const rsiResult = await getRSI(interval);
+  const rsiResult = await getRSI(interval, ctx.logger);
   sum += rsiResult.suggestion;
 
   //get Stoch
-  const stochResult = await getStoch(interval);
+  const stochResult = await getStoch(interval, ctx.logger);
   sum += stochResult.suggestion;
 
   const taResults: TaResult[] = [
@@ -101,7 +99,9 @@ async function getTas(ctx: TelegrafContext, interval: string) {
     },
     //convert stoch to human readable object
     {
-      value: `${stochResult.result.valueSlowD.toFixed(2)},${stochResult.result.valueSlowK.toFixed(2)}`,
+      value: `${stochResult.result.valueSlowD.toFixed(
+        2,
+      )},${stochResult.result.valueSlowK.toFixed(2)}`,
       suggestion: getSuggestionString(ctx, stochResult.suggestion),
     },
   ];

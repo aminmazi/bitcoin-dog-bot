@@ -20,7 +20,7 @@ async function getPriceInUSD(): Promise<number> {
     //if price doesn't exist on cache, fetch price from api
     price = await axios
       .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-      .then(res => res.data.bpi.USD.rate_float);
+      .then((res) => res.data.bpi.USD.rate_float);
 
     cache?.set(CACHE_KEYS.PRICE, price, env.CACHE_INTERVAL);
   }
@@ -34,9 +34,16 @@ async function getPriceIRT(): Promise<number> {
   let price = cache?.get<number>(CACHE_KEYS.PRICE_IRT);
   if (!price) {
     //if price doesn't exist on cache, fetch price from api
+    // price = await axios
+    //   .get("https://ramzinex.com/exchange/api/exchange/prices")
+    //   .then(res => res.data.original.btcirr.sell / 10);
+
     price = await axios
-      .get("https://ramzinex.com/exchange/api/exchange/prices")
-      .then(res => res.data.original.btcirr.sell / 10);
+      .post("https://api.nobitex.ir/market/stats", {
+        srcCurrency: "btc",
+        dstCurrency: "rls",
+      })
+      .then((res) => res.data.stats["btc-rls"].latest / 10);
 
     cache?.set(CACHE_KEYS.PRICE_IRT, price, env.CACHE_INTERVAL);
   }
@@ -56,7 +63,7 @@ export async function getPriceChange(): Promise<number> {
     //if price doesn't exist on cache, fetch price from api
     const res = await axios
       .get("https://api.coindesk.com/v1/bpi/historical/close.json")
-      .then(res => res.data.bpi);
+      .then((res) => res.data.bpi);
 
     const priceOfYesterday = res[Object.keys(res)[Object.keys(res).length - 1]];
 
@@ -76,7 +83,7 @@ export async function getNumOfUnconfirmed(): Promise<number> {
     //if price doesn't exist on cache, fetch price from api
     numOfUnconfirmed = await axios
       .get("https://blockchain.info/q/unconfirmedcount")
-      .then(res => res.data);
+      .then((res) => res.data);
 
     cache?.set(
       CACHE_KEYS.NUM_OF_UNCONFIRMED,

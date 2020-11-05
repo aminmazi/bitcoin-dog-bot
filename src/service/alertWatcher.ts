@@ -13,8 +13,8 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
     enabled: true,
     $or: [{ type: ALERT_TYPES.PRICE }, { type: { $exists: false } }],
   });
-  console.log(
-    `watcher service started another round for price alerts with ${priceAlerts.length} enabled alerts`,
+  bot.context.logger.info(
+    `watcher_1 service started another round for price alerts with ${priceAlerts.length} enabled alerts`,
   );
   priceAlerts.forEach(async function (alert) {
     const price = await getPriceForCurrency(alert.currency || "BTC");
@@ -22,6 +22,9 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
       if (alert.to <= price) {
         // send alert to user
         await sendPriceAlert(bot, alert, price);
+        bot.context.logger.info("watcher_3.1 alert sent", {
+          data: { alert, price },
+        });
         return;
       }
     }
@@ -30,6 +33,9 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
       if (alert.to >= price) {
         // send alert to user
         await sendPriceAlert(bot, alert, price);
+        bot.context.logger.info("watcher_3.2 alert sent", {
+          data: { alert, price },
+        });
         return;
       }
     }
@@ -39,7 +45,7 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
     enabled: true,
     type: ALERT_TYPES.MEMPOOL,
   });
-  console.log(
+  bot.context.logger.info(
     `watcher service started another round for mempool alerts with ${memPoolAlerts.length} enabled alerts`,
   );
   memPoolAlerts.forEach(async function (alert) {
@@ -69,7 +75,7 @@ async function sendPriceAlert(
       str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
     );
   } catch (error) {
-    console.log(error);
+    bot.context.logger.error(error);
   } finally {
     await alert.updateOne({ enabled: false });
   }
@@ -88,7 +94,7 @@ async function sendMempoolAlert(
       str(bot.context, KEYS.MEMPOOL_ALERT_FIRE, [num]),
     );
   } catch (error) {
-    console.log(error);
+    bot.context.logger.error(error);
   } finally {
     await alert.updateOne({ enabled: false });
   }

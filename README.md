@@ -27,4 +27,4 @@ npm run start:dev
 
 📈 TAAPI for technical analysis data.
 
-🇮🇷 Ramzinex for price information in IRT currency.
+🇮🇷 Ramzinex and nobitex for price information in IRT currency.

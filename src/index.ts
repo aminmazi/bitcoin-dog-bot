@@ -6,6 +6,8 @@ import rateLimit from "telegraf-ratelimit";
 import { createInstance as initCacheInstance } from "./utils/cache";
 import { attachUser } from "./middlewares/attachUser";
 import alertWatcher from "./service/alertWatcher";
+import winston from "winston";
+import { Loggly } from "winston-loggly-bulk";
 // import taapi from "taapi";
 
 // Set limit to 1 message per 3 seconds
@@ -16,6 +18,25 @@ const limitConfig = {
 };
 
 async function main() {
+  const logger = winston.createLogger({
+    level: "info",
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.json(),
+    ),
+    defaultMeta: { service: "bitcoin-dog-bot" },
+    transports: [
+      new Loggly({
+        token: env.LOG_PASSWORD,
+        subdomain: env.LOG_USERNAME,
+        tags: ["bitcoin-dog-bot"],
+        json: true,
+      }),
+      new winston.transports.Console(),
+    ],
+  });
+
+  logger.log("info", "Hello World from bitcoin dog bot!");
   // Connect to mongoose
   mongoose.connect(
     env.MONGO,
@@ -23,18 +44,19 @@ async function main() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     },
-    err => {
+    (err) => {
       if (err) {
-        console.log(err.message);
-        console.log(err);
+        logger.error(err.message);
+        logger.error(err);
       } else {
-        console.log("Connected to MongoDB");
+        logger.error("Connected to MongoDB");
       }
     },
   );
 
   mongoose.set("useCreateIndex", true);
   let bot = new Telegraf(env.BOT_TOKEN);
+  bot.context.logger = logger;
   //init cache
   initCacheInstance();
   //rate limit
@@ -45,12 +67,12 @@ async function main() {
   await registerHandlers(bot);
   // register global error handler to prevent the bot from stopping after an exception
   bot.catch((err: any, ctx: Context) => {
-    console.log(`Ooops, encountered an error for ${ctx.updateType}`, err);
+    logger.error(`Ooops, encountered an error for ${ctx.updateType}`, err);
   });
   bot.launch();
   // run alert service
   alertWatcher(bot);
-  console.log("bitcoin_dog_bot started! ");
+  logger.info("bitcoin_dog_bot started! ");
   // const client = taapi.client(env.TAAPI);
   // let result;
   // try {
