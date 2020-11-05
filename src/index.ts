@@ -49,7 +49,7 @@ async function main() {
         logger.error(err.message);
         logger.error(err);
       } else {
-        logger.error("Connected to MongoDB");
+        logger.info("Connected to MongoDB");
       }
     },
   );
