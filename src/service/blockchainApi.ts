@@ -9,6 +9,8 @@ export async function getPrice(currency = "USD"): Promise<number> {
       return await getPriceInUSD();
     case "IRT":
       return await getPriceIRT();
+    case "USDT": // get price of usdt in IRT
+      return await getPriceOfUSDT();
   }
   // normally shouldn't reach here
   throw new Error("failed to get price");
@@ -49,6 +51,24 @@ async function getPriceIRT(): Promise<number> {
   }
   if (!price) {
     throw new Error("failed to get price IRT");
+  }
+  return price;
+}
+
+async function getPriceOfUSDT(): Promise<number> {
+  let price = cache?.get<number>(CACHE_KEYS.PRICE_USDT);
+  if (!price) {
+    price = await axios
+      .post("https://api.nobitex.ir/market/stats", {
+        srcCurrency: "usdt",
+        dstCurrency: "rls",
+      })
+      .then((res) => res.data.stats["usdt-rls"].latest / 10);
+
+    cache?.set(CACHE_KEYS.PRICE_USDT, price, env.CACHE_INTERVAL);
+  }
+  if (!price) {
+    throw new Error("failed to get price USDT");
   }
   return price;
 }

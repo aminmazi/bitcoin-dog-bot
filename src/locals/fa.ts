@@ -36,12 +36,13 @@ export function strFa(name: KEYS, params: any[] = []) {
 <b>For changing language again run /${COMMANDS.LANG}</b>`;
 
     case KEYS.STATS_COMMAND:
-      return `<b>💰 قیمت به دلار:  ${params[0]}
+      return `<b>💰 قیمت به دلار:  ${params[0]} ${
+        params[2] >= 0 ? ` %${params[2]}+ ✅` : ` %${params[2]} 🔻`
+      }
+      
 🇮🇷 ${params[1]} تومان </b>
       
-<b>📈 تغییر در ۲۴ ساعت:${
-        params[2] >= 0 ? ` %${params[2]}+ ✅` : ` %${params[2]} 🔻`
-      } </b>
+<b>تتر 🇺🇸:  ${params[4]} تومان</b>
       
 ${
   params[3]

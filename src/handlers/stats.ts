@@ -13,8 +13,13 @@ export default async function registerStats(bot: Telegraf<TelegrafContext>) {
 }
 
 async function printStatsCommand(ctx: TelegrafContext) {
-  const price = Number((await getPrice("USD")).toFixed(0)).toLocaleString();
+  const priceInUSD = Number(
+    (await getPrice("USD")).toFixed(0),
+  ).toLocaleString();
   const priceIRT = Number((await getPrice("IRT")).toFixed(0)).toLocaleString();
+  const priceOfUSDT = Number(
+    (await getPrice("USDT")).toFixed(0),
+  ).toLocaleString();
   let numOfUnconfirmed = 0;
   try {
     numOfUnconfirmed = await getNumOfUnconfirmed();
@@ -22,9 +27,15 @@ async function printStatsCommand(ctx: TelegrafContext) {
     ctx.logger.error(error);
   }
 
-  const change = Number((await getPriceChange()).toFixed(2));
+  const changeInUSD = Number((await getPriceChange()).toFixed(2));
 
   return ctx.replyWithHTML(
-    str(ctx, KEYS.STATS_COMMAND, [price, priceIRT, change, numOfUnconfirmed]),
+    str(ctx, KEYS.STATS_COMMAND, [
+      priceInUSD,
+      priceIRT,
+      changeInUSD,
+      numOfUnconfirmed,
+      priceOfUSDT,
+    ]),
   );
 }

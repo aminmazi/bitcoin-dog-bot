@@ -36,12 +36,13 @@ export function strEn(name: KEYS, params: any[] = []) {
 <b>For changing language again run /${COMMANDS.LANG}</b>`;
 
     case KEYS.STATS_COMMAND:
-      return `<b>💰 Price: $${params[0]}
-🇮🇷 ${params[1]} IRT</b>
-      
-<b>📈 24 hours change: ${
+      return `<b>🅑 $${params[0]} ${
         params[2] >= 0 ? `✅ +${params[2]}` : `🔻 ${params[2]}`
-      }% </b>
+      }%
+
+🅑 ${params[1]} IRT 🇮🇷</b>
+      
+<b>🇺🇸 USDT: ${params[4]} IRT </b>
       
 ${
   params[3]
