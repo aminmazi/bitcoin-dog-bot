@@ -84,11 +84,11 @@ async function getTas(ctx: TelegrafContext, interval: string) {
   let sum = 0;
 
   //get RSI
-  const rsiResult = await getRSI(interval, ctx.logger);
+  const rsiResult = await getRSI(interval);
   sum += rsiResult.suggestion;
 
   //get Stoch
-  const stochResult = await getStoch(interval, ctx.logger);
+  const stochResult = await getStoch(interval);
   sum += stochResult.suggestion;
 
   const taResults: TaResult[] = [

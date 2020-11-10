@@ -7,13 +7,14 @@ import { str, KEYS } from "../locals";
 import User from "../models/user";
 import { TelegrafContext } from "telegraf/typings/context";
 import Telegraf from "telegraf";
+import { logger } from "../utils/logger";
 
 export default async function watcher(bot: Telegraf<TelegrafContext>) {
   const priceAlerts = await Alert.find({
     enabled: true,
     $or: [{ type: ALERT_TYPES.PRICE }, { type: { $exists: false } }],
   });
-  bot.context.logger.info(
+  logger.info(
     `watcher_1 service started another round for price alerts with ${priceAlerts.length} enabled alerts`,
   );
   priceAlerts.forEach(async function (alert) {
@@ -22,7 +23,7 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
       if (alert.to <= price) {
         // send alert to user
         await sendPriceAlert(bot, alert, price);
-        bot.context.logger.info("watcher_3.1 alert sent", {
+        logger.info("watcher_3.1 alert sent", {
           data: { alert, price },
         });
         return;
@@ -33,7 +34,7 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
       if (alert.to >= price) {
         // send alert to user
         await sendPriceAlert(bot, alert, price);
-        bot.context.logger.info("watcher_3.2 alert sent", {
+        logger.info("watcher_3.2 alert sent", {
           data: { alert, price },
         });
         return;
@@ -45,7 +46,7 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
     enabled: true,
     type: ALERT_TYPES.MEMPOOL,
   });
-  bot.context.logger.info(
+  logger.info(
     `watcher service started another round for mempool alerts with ${memPoolAlerts.length} enabled alerts`,
   );
   memPoolAlerts.forEach(async function (alert) {
@@ -75,7 +76,7 @@ async function sendPriceAlert(
       str(bot.context, KEYS.ALERT_FIRE, [alert, price]),
     );
   } catch (error) {
-    bot.context.logger.error(error);
+    logger.error(error);
   } finally {
     await alert.updateOne({ enabled: false });
   }
@@ -94,7 +95,7 @@ async function sendMempoolAlert(
       str(bot.context, KEYS.MEMPOOL_ALERT_FIRE, [num]),
     );
   } catch (error) {
-    bot.context.logger.error(error);
+    logger.error(error);
   } finally {
     await alert.updateOne({ enabled: false });
   }

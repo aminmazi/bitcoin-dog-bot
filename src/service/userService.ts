@@ -1,5 +1,6 @@
 import User from "../models/user";
 import { TelegrafContext } from "telegraf/typings/context";
+import { logger } from "../utils/logger";
 
 // Get or create User
 export async function incrementUserUsage(ctx: TelegrafContext) {
@@ -20,6 +21,6 @@ export async function incrementUserUsage(ctx: TelegrafContext) {
     }
     return user;
   } catch (error) {
-    ctx.logger.info(error);
+    logger.info(error);
   }
 }

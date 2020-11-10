@@ -4,7 +4,7 @@ import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
 import { str, KEYS } from "../locals";
 import { TelegrafContext } from "telegraf/typings/context";
-import { Logger } from "winston";
+import { logger } from "../utils/logger";
 export interface RsiResult {
   rsi: number;
   suggestion: SUGGESTION;
@@ -25,7 +25,6 @@ export enum SUGGESTION {
 
 export async function getRSI(
   interval: string,
-  logger: Logger,
 ): Promise<RsiResult> {
   //first check the cache
   let rsiResult = cache?.get<RsiResult>(`${CACHE_KEYS.TA_RSI}_${interval}`);
@@ -57,7 +56,6 @@ export async function getRSI(
 
 export async function getStoch(
   interval: string,
-  logger: Logger,
 ): Promise<StochResult> {
   //first check the cache
   let stochResult = cache?.get<StochResult>(

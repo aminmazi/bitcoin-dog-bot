@@ -37,7 +37,7 @@ async function getPriceInUSD(): Promise<number> {
 
 function savePriceHistory(price: number | undefined, currency: string) {
   const dayNumber = moment().date() % 2; //for even/odd days
-  const historyCacheKey = `history_${currency}_${dayNumber}_${moment().hour}`;
+  const historyCacheKey = `history_${currency}_${dayNumber}_${moment().hour()}`;
   if (!cache?.get<number>(historyCacheKey)) {
     cache?.set(historyCacheKey, price, 3600 * 25);
   }
@@ -94,9 +94,7 @@ export async function getPriceChange(currency = "USD"): Promise<number> {
 
   const yesterdayNumber = moment().date() % 2 === 0 ? 1 : 0;
 
-  const historyCacheKey = `history_${currency}_${yesterdayNumber}_${
-    moment().hour
-  }`;
+  const historyCacheKey = `history_${currency}_${yesterdayNumber}_${moment().hour()}`;
 
   const priceOfYesterday = cache?.get<number>(historyCacheKey) || currentPrice;
 
