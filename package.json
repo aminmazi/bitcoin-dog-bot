@@ -21,6 +21,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "envalid": "^6.0.2",
+    "moment": "^2.29.1",
     "mongoose": "^5.10.11",
     "node-cache": "^5.1.2",
     "taapi": "^1.2.7",

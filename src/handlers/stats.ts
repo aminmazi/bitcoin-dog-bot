@@ -7,8 +7,12 @@ import {
 import { COMMANDS } from "../utils/consts";
 import { str, KEYS } from "../locals";
 import { TelegrafContext } from "telegraf/typings/context";
+import { cache } from "../utils/cache";
 
 export default async function registerStats(bot: Telegraf<TelegrafContext>) {
+  bot.context.logger.debug("received stats command", {
+    data: { chatId: bot.context.user.chatId, cache: cache?.data },
+  });
   bot.command(COMMANDS.STATS, printStatsCommand);
 }
 
@@ -27,7 +31,22 @@ async function printStatsCommand(ctx: TelegrafContext) {
     ctx.logger.error(error);
   }
 
-  const changeInUSD = Number((await getPriceChange()).toFixed(2));
+  const changeInUSD = Number((await getPriceChange("USD")).toFixed(2));
+  const changeForIRT = Number((await getPriceChange("IRT")).toFixed(2));
+  const changeForUSDT = Number((await getPriceChange("USDT")).toFixed(2));
+
+  ctx.logger.debug("running stat command", {
+    data: {
+      priceInUSD,
+      priceIRT,
+      changeInUSD,
+      numOfUnconfirmed,
+      priceOfUSDT,
+      changeForIRT,
+      changeForUSDT,
+      cache: cache?.data,
+    },
+  });
 
   return ctx.replyWithHTML(
     str(ctx, KEYS.STATS_COMMAND, [
@@ -36,6 +55,8 @@ async function printStatsCommand(ctx: TelegrafContext) {
       changeInUSD,
       numOfUnconfirmed,
       priceOfUSDT,
+      changeForIRT,
+      changeForUSDT,
     ]),
   );
 }

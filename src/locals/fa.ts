@@ -40,9 +40,13 @@ export function strFa(name: KEYS, params: any[] = []) {
         params[2] >= 0 ? ` %${params[2]}+ ✅` : ` %${params[2]} 🔻`
       }
       
-🇮🇷 ${params[1]} تومان </b>
+${params[1]} تومان ${
+  params[5] >= 0 ? ` %${params[5]}+ ✅` : ` %${params[5]} 🔻`
+}</b>
       
-<b>تتر 🇺🇸:  ${params[4]} تومان</b>
+<b>تتر 🇺🇸:  ${params[4]} تومان ${
+  params[6] >= 0 ? ` %${params[6]}+ ✅` : ` %${params[6]} 🔻`
+}</b>
       
 ${
   params[3]

@@ -40,9 +40,13 @@ export function strEn(name: KEYS, params: any[] = []) {
         params[2] >= 0 ? `✅ +${params[2]}` : `🔻 ${params[2]}`
       }%
 
-🅑 ${params[1]} IRT 🇮🇷</b>
+🅑 ${params[1]} IRT ${
+  params[5] >= 0 ? `✅ +${params[5]}` : `🔻 ${params[5]}`
+}%</b>
       
-<b>🇺🇸 USDT: ${params[4]} IRT </b>
+<b>🇺🇸 USDT: ${params[4]} IRT ${
+  params[6] >= 0 ? `✅ +${params[6]}` : `🔻 ${params[6]}`
+}%</b>
       
 ${
   params[3]

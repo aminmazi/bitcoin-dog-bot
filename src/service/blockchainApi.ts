@@ -2,6 +2,7 @@ import axios from "axios";
 import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
 import env from "../utils/env";
+import moment from "moment";
 
 export async function getPrice(currency = "USD"): Promise<number> {
   switch (currency) {
@@ -25,11 +26,21 @@ async function getPriceInUSD(): Promise<number> {
       .then((res) => res.data.bpi.USD.rate_float);
 
     cache?.set(CACHE_KEYS.PRICE, price, env.CACHE_INTERVAL);
+    //set history for 24 hours change calculation
+    savePriceHistory(price, "USD");
   }
   if (!price) {
     throw new Error("failed to get price");
   }
   return price;
+}
+
+function savePriceHistory(price: number | undefined, currency: string) {
+  const dayNumber = moment().date() % 2; //for even/odd days
+  const historyCacheKey = `history_${currency}_${dayNumber}_${moment().hour}`;
+  if (!cache?.get<number>(historyCacheKey)) {
+    cache?.set(historyCacheKey, price, 3600 * 25);
+  }
 }
 
 async function getPriceIRT(): Promise<number> {
@@ -48,6 +59,8 @@ async function getPriceIRT(): Promise<number> {
       .then((res) => res.data.stats["btc-rls"].latest / 10);
 
     cache?.set(CACHE_KEYS.PRICE_IRT, price, env.CACHE_INTERVAL);
+    //set history for 24 hours change calculation
+    savePriceHistory(price, "IRT");
   }
   if (!price) {
     throw new Error("failed to get price IRT");
@@ -66,6 +79,8 @@ async function getPriceOfUSDT(): Promise<number> {
       .then((res) => res.data.stats["usdt-rls"].latest / 10);
 
     cache?.set(CACHE_KEYS.PRICE_USDT, price, env.CACHE_INTERVAL);
+    //set history for 24 hours change calculation
+    savePriceHistory(price, "USDT");
   }
   if (!price) {
     throw new Error("failed to get price USDT");
@@ -73,27 +88,20 @@ async function getPriceOfUSDT(): Promise<number> {
   return price;
 }
 
-export async function getPriceChange(): Promise<number> {
+export async function getPriceChange(currency = "USD"): Promise<number> {
   // 1. get current price
   let currentPrice = await getPrice();
 
-  // 2. get 24 hours ago price
-  let change = cache?.get<number>(CACHE_KEYS.PRICE_CHANGE);
-  if (!change) {
-    //if price doesn't exist on cache, fetch price from api
-    const res = await axios
-      .get("https://api.coindesk.com/v1/bpi/historical/close.json")
-      .then((res) => res.data.bpi);
+  const yesterdayNumber = moment().date() % 2 === 0 ? 1 : 0;
 
-    const priceOfYesterday = res[Object.keys(res)[Object.keys(res).length - 1]];
+  const historyCacheKey = `history_${currency}_${yesterdayNumber}_${
+    moment().hour
+  }`;
 
-    change = ((currentPrice - priceOfYesterday) / priceOfYesterday) * 100;
+  const priceOfYesterday = cache?.get<number>(historyCacheKey) || currentPrice;
 
-    cache?.set(CACHE_KEYS.PRICE_CHANGE, change, env.CACHE_INTERVAL);
-  }
-  if (!change) {
-    throw new Error("failed to get change");
-  }
+  const change = ((currentPrice - priceOfYesterday) / priceOfYesterday) * 100;
+
   return change;
 }
 
