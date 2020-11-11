@@ -90,7 +90,7 @@ async function getPriceOfUSDT(): Promise<number> {
 
 export async function getPriceChange(currency = "USD"): Promise<number> {
   // 1. get current price
-  let currentPrice = await getPrice();
+  let currentPrice = await getPrice(currency);
 
   const yesterdayNumber = moment().date() % 2 === 0 ? 1 : 0;
 

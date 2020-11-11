@@ -6,6 +6,9 @@ import rateLimit from "telegraf-ratelimit";
 import { createInstance as initCacheInstance } from "./utils/cache";
 import { attachUser } from "./middlewares/attachUser";
 import alertWatcher from "./service/alertWatcher";
+import fillCacheEveryHour, {
+  initilizeHistoryCache,
+} from "./service/priceCacheFill";
 import { initLogger } from "./utils/logger";
 
 // import taapi from "taapi";
@@ -55,6 +58,8 @@ async function main() {
   bot.launch();
   // run alert service
   alertWatcher(bot);
+  fillCacheEveryHour();
+  initilizeHistoryCache();
   console.log("bitcoin_dog_bot started! ");
   // const client = taapi.client(env.TAAPI);
   // let result;
