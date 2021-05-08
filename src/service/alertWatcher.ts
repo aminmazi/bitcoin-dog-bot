@@ -1,8 +1,5 @@
 import Alert, { ALERT_TYPES } from "../models/alert";
-import {
-  getPriceForCurrency,
-  getNumOfUnconfirmed,
-} from "../service/blockchainApi";
+import { getPrice, getNumOfUnconfirmed } from "../service/blockchainApi";
 import { str, KEYS } from "../locals";
 import User from "../models/user";
 import { TelegrafContext } from "telegraf/typings/context";
@@ -18,7 +15,7 @@ export default async function watcher(bot: Telegraf<TelegrafContext>) {
     `watcher_1 service started another round for price alerts with ${priceAlerts.length} enabled alerts`,
   );
   priceAlerts.forEach(async function (alert) {
-    const price = await getPriceForCurrency(alert.currency || "BTC");
+    const price = await getPrice(alert.currency?.toUpperCase() || "BTC");
     if (alert.alertUp) {
       if (alert.to <= price) {
         // send alert to user

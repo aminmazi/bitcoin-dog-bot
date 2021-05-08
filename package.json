@@ -12,17 +12,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/mongoose": "^5.7.36",
     "@types/winston-loggly-bulk": "^3.0.0",
     "nodemon": "^2.0.6",
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.0.0"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "envalid": "^6.0.2",
     "moment": "^2.29.1",
-    "mongoose": "^5.10.11",
+    "mongoose": "^5.12.7",
     "node-cache": "^5.1.2",
     "taapi": "^1.2.7",
     "telegraf": "^3.38.0",

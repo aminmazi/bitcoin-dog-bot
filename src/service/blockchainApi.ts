@@ -6,28 +6,32 @@ import moment from "moment";
 
 export async function getPrice(currency = "USD"): Promise<number> {
   switch (currency) {
+    // BTC in USD
     case "USD":
-      return await getPriceInUSD();
+      return await getBtcPriceInUSD();
+    // BTC in IRT
     case "IRT":
-      return await getPriceIRT();
-    case "USDT": // get price of usdt in IRT
-      return await getPriceOfUSDT();
+      return await getCoinPriceFromNobitex("btc", "rls");
+    // USDT in IRT
+    case "USDT":
+      return await getCoinPriceFromNobitex("usdt", "rls");
   }
   // normally shouldn't reach here
   throw new Error("failed to get price");
 }
 
-async function getPriceInUSD(): Promise<number> {
-  let price = cache?.get<number>(CACHE_KEYS.PRICE);
+async function getBtcPriceInUSD(): Promise<number> {
+  const cacheKey = `btc_To_usd`;
+  let price = cache?.get<number>(cacheKey);
   if (!price) {
     //if price doesn't exist on cache, fetch price from api
     price = await axios
       .get("https://api.coindesk.com/v1/bpi/currentprice.json")
       .then((res) => res.data.bpi.USD.rate_float);
 
-    cache?.set(CACHE_KEYS.PRICE, price, env.CACHE_INTERVAL);
+    cache?.set(cacheKey, price, env.CACHE_INTERVAL);
     //set history for 24 hours change calculation
-    savePriceHistory(price, "USD");
+    savePriceHistory(price, cacheKey);
   }
   if (!price) {
     throw new Error("failed to get price");
@@ -35,66 +39,45 @@ async function getPriceInUSD(): Promise<number> {
   return price;
 }
 
-function savePriceHistory(price: number | undefined, currency: string) {
+function savePriceHistory(price: number | undefined, pair: string) {
   const dayNumber = moment().date() % 2; //for even/odd days
-  const historyCacheKey = `history_${currency}_${dayNumber}_${moment().hour()}`;
+  const historyCacheKey = `history_${pair}_${dayNumber}_${moment().hour()}`;
   if (!cache?.get<number>(historyCacheKey)) {
     cache?.set(historyCacheKey, price, 3600 * 25);
   }
 }
 
-async function getPriceIRT(): Promise<number> {
-  let price = cache?.get<number>(CACHE_KEYS.PRICE_IRT);
+async function getCoinPriceFromNobitex(
+  from: string,
+  to: string,
+): Promise<number> {
+  const cacheKey = `${from}_To_${to}`;
+  let price = cache?.get<number>(cacheKey);
   if (!price) {
-    //if price doesn't exist on cache, fetch price from api
-    // price = await axios
-    //   .get("https://ramzinex.com/exchange/api/exchange/prices")
-    //   .then(res => res.data.original.btcirr.sell / 10);
-
     price = await axios
       .post("https://api.nobitex.ir/market/stats", {
-        srcCurrency: "btc",
-        dstCurrency: "rls",
+        srcCurrency: from,
+        dstCurrency: to,
       })
-      .then((res) => res.data.stats["btc-rls"].latest / 10);
+      .then((res) => res.data.stats[`${from}-${to}`].latest / 10);
 
-    cache?.set(CACHE_KEYS.PRICE_IRT, price, env.CACHE_INTERVAL);
+    cache?.set(cacheKey, price, env.CACHE_INTERVAL);
     //set history for 24 hours change calculation
-    savePriceHistory(price, "IRT");
+    savePriceHistory(price, cacheKey);
   }
   if (!price) {
-    throw new Error("failed to get price IRT");
+    throw new Error(`failed to get price ${cacheKey}`);
   }
   return price;
 }
 
-async function getPriceOfUSDT(): Promise<number> {
-  let price = cache?.get<number>(CACHE_KEYS.PRICE_USDT);
-  if (!price) {
-    price = await axios
-      .post("https://api.nobitex.ir/market/stats", {
-        srcCurrency: "usdt",
-        dstCurrency: "rls",
-      })
-      .then((res) => res.data.stats["usdt-rls"].latest / 10);
-
-    cache?.set(CACHE_KEYS.PRICE_USDT, price, env.CACHE_INTERVAL);
-    //set history for 24 hours change calculation
-    savePriceHistory(price, "USDT");
-  }
-  if (!price) {
-    throw new Error("failed to get price USDT");
-  }
-  return price;
-}
-
-export async function getPriceChange(currency = "USD"): Promise<number> {
+export async function getPriceChange(pair = "btc_To_usd"): Promise<number> {
   // 1. get current price
-  let currentPrice = await getPrice(currency);
+  let currentPrice = await getPrice(pair);
 
   const yesterdayNumber = moment().date() % 2 === 0 ? 1 : 0;
 
-  const historyCacheKey = `history_${currency}_${yesterdayNumber}_${moment().hour()}`;
+  const historyCacheKey = `history_${pair}_${yesterdayNumber}_${moment().hour()}`;
 
   const priceOfYesterday = cache?.get<number>(historyCacheKey) || currentPrice;
 
@@ -121,13 +104,4 @@ export async function getNumOfUnconfirmed(): Promise<number> {
     throw new Error("failed to get numOfUnconfirmed");
   }
   return numOfUnconfirmed;
-}
-
-export async function getPriceForCurrency(currency: string): Promise<Number> {
-  if (currency.toUpperCase() === "USD")
-    return Number((await getPrice("USD")).toFixed(0));
-  else if (currency.toUpperCase() === "IRT")
-    return Number((await getPrice("IRT")).toFixed(0));
-  // normally shouldn't reach here
-  throw new Error("failed to get price");
 }

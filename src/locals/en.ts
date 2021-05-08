@@ -50,7 +50,7 @@ export function strEn(name: KEYS, params: any[] = []) {
       
 ${
   params[3]
-    ? `<b>⏳ Num Of Unconfirmed TXs: ${params[3].toLocaleString()}</b>`
+    ? `<b>⏳ Unconfirmed BTC TXs: ${params[3].toLocaleString()}</b>`
     : ""
 }`;
 
@@ -83,10 +83,11 @@ You'll be notified the first time price goes ${
 You'll be notified the first time number of mempool txs goes down to ${params[0].toLocaleString()} .</b>`;
 
     case KEYS.ALERT_FIRE:
+      const price = Number((params[1] as number).toFixed(0)).toLocaleString()
       return `🚨 
 bitcoin price went ${
         params[0].alertUp ? "up" : "down"
-      } to ${params[1].toLocaleString()} ${params[0].currency}`;
+      } to ${price} ${params[0].currency}`;
 
     case KEYS.MEMPOOL_ALERT_FIRE:
       return `🚨 

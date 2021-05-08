@@ -1,6 +1,6 @@
 import Telegraf from "telegraf";
 import { COMMANDS } from "../utils/consts";
-import { getPrice, getPriceForCurrency } from "../service/blockchainApi";
+import { getPrice } from "../service/blockchainApi";
 import Alert, { ALERT_TYPES } from "../models/alert";
 import { str, KEYS } from "../locals";
 import { TelegrafContext } from "telegraf/typings/context";
@@ -40,7 +40,7 @@ async function getAlertTypeForCurrency(
   currency: string,
   toPrice: Number,
 ): Promise<Boolean> {
-  return toPrice > (await getPriceForCurrency(currency));
+  return toPrice > (await getPrice(currency.toUpperCase()));
 }
 
 async function printMempoolAlertCommand(ctx: TelegrafContext) {
