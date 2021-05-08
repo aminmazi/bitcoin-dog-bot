@@ -1,5 +1,5 @@
 # bitcoin-dog-bot
-*Telegram bot for Bitcoin* 
+*Telegram bot for Bitcoin & Ethereum* 
 
 ✅ Price and blockchain stats
 
@@ -27,4 +27,4 @@ npm run start:dev
 
 📈 TAAPI for technical analysis data.
 
-🇮🇷 Ramzinex and nobitex for price information in IRT currency.
+🇮🇷 Ramzinex and Nobitex for price information in IRT currency.
