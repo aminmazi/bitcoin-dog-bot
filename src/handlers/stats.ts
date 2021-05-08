@@ -22,6 +22,8 @@ async function printStatsCommand(ctx: TelegrafContext) {
   const priceOfUSDT = Number(
     (await getPrice("USDT")).toFixed(0),
   ).toLocaleString();
+  const priceEthInIRT = Number((await getPrice("ETH-IRT")).toFixed(0)).toLocaleString();
+  const priceEthInUSD = Number((await getPrice("ETH-USD")).toFixed(0)).toLocaleString();
   let numOfUnconfirmed = 0;
   try {
     numOfUnconfirmed = await getNumOfUnconfirmed();
@@ -29,9 +31,11 @@ async function printStatsCommand(ctx: TelegrafContext) {
     logger.error(error);
   }
 
-  const changeInUSD = Number((await getPriceChange("USD")).toFixed(2));
-  const changeForIRT = Number((await getPriceChange("IRT")).toFixed(2));
-  const changeForUSDT = Number((await getPriceChange("USDT")).toFixed(2));
+  const changeInUSD = Number((await getPriceChange("btc_TO_usd")).toFixed(2));
+  const changeForIRT = Number((await getPriceChange("btc_TO_rls")).toFixed(2));
+  const changeForUSDT = Number((await getPriceChange("usdt_TO_rls")).toFixed(2));
+  const changeForETHinIRT = Number((await getPriceChange("eth_TO_rls")).toFixed(2));
+  const changeForETHInUSD = Number((await getPriceChange("eth_TO_usdt")).toFixed(2));
 
   logger.info("running stat command", {
     data: {
@@ -43,6 +47,8 @@ async function printStatsCommand(ctx: TelegrafContext) {
       changeForIRT,
       changeForUSDT,
       cache: cache?.data,
+      priceEthInIRT,
+      priceEthInUSD
     },
   });
 
@@ -55,6 +61,10 @@ async function printStatsCommand(ctx: TelegrafContext) {
       priceOfUSDT,
       changeForIRT,
       changeForUSDT,
+      priceEthInIRT,
+      priceEthInUSD,
+      changeForETHinIRT,
+      changeForETHInUSD
     ]),
   );
 }

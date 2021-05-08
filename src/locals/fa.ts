@@ -50,9 +50,17 @@ ${params[1]} تومان ${
       
 ${
   params[3]
-    ? `<b>⏳ تراکنش های در صف تایید: ${params[3].toLocaleString()}</b>`
+    ? `<b>⏳ تراکنش های بیتکوین در صف تایید: ${params[3].toLocaleString()}</b>`
     : ""
-}`;
+}
+
+<b>💰 اتر به دلار:  ${params[8]} ${
+  params[10] >= 0 ? ` %${params[10]}+ ✅` : ` %${params[10]} 🔻`
+}</b>
+
+<b>اتر به تومان:  ${params[7]} ${
+  params[9] >= 0 ? ` %${params[9]}+ ✅` : ` %${params[9]} 🔻`
+}</b>`;
 
     case KEYS.ALERT_HELP:
       return `<b>نحوه استفاده:
@@ -85,8 +93,9 @@ ${
  زمانی که تعداد تراکنشهای تایید نشده به مقدار  ${params[0].toLocaleString()} ${"سقوط کند"}، شما هشدار دریافت خواهید کرد.</b>`;
 
     case KEYS.ALERT_FIRE:
+      const price = Number((params[1] as number).toFixed(0)).toLocaleString()
       return ` 🚨
-قیمت بیتکوین به مقدار ${params[1].toLocaleString()} ${params[0].currency}
+قیمت بیتکوین به مقدار ${price} ${params[0].currency}
 ${params[0].alertUp ? "افزایش" : "کاهش"} یافت.`;
 
     case KEYS.MEMPOOL_ALERT_FIRE:

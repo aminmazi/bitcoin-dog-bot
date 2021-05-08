@@ -52,7 +52,15 @@ ${
   params[3]
     ? `<b>⏳ Unconfirmed BTC TXs: ${params[3].toLocaleString()}</b>`
     : ""
-}`;
+}
+
+<b>ETH $${params[8]} ${
+  params[10] >= 0 ? `✅ +${params[10]}` : `🔻 ${params[10]}`
+}%</b>
+
+<b>ETH ${params[7]} IRT ${
+  params[9] >= 0 ? `✅ +${params[9]}` : `🔻 ${params[9]}`
+}%</b>`;
 
     case KEYS.ALERT_HELP:
       return `<b>Usage template: /alert [value] [currency]

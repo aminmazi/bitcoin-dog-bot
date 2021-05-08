@@ -3,25 +3,36 @@ import { cache } from "../utils/cache";
 import { CACHE_KEYS } from "../utils/consts";
 import env from "../utils/env";
 import moment from "moment";
+import { logger } from "../utils/logger";
 
 export async function getPrice(currency = "USD"): Promise<number> {
   switch (currency) {
     // BTC in USD
     case "USD":
+    case "btc_TO_usd":
       return await getBtcPriceInUSD();
     // BTC in IRT
     case "IRT":
+    case "btc_TO_rls":
       return await getCoinPriceFromNobitex("btc", "rls");
     // USDT in IRT
     case "USDT":
+    case "usdt_TO_rls":
       return await getCoinPriceFromNobitex("usdt", "rls");
+    case "ETH-USD":
+    case "eth_TO_usdt":
+      return await getCoinPriceFromNobitex("eth", "usdt");
+    case "ETH-IRT":
+    case "eth_TO_rls":
+      return await getCoinPriceFromNobitex("eth", "rls");
   }
   // normally shouldn't reach here
+  logger.error(`failed to get price for ${currency}`);
   throw new Error("failed to get price");
 }
 
 async function getBtcPriceInUSD(): Promise<number> {
-  const cacheKey = `btc_To_usd`;
+  const cacheKey = `btc_TO_usd`;
   let price = cache?.get<number>(cacheKey);
   if (!price) {
     //if price doesn't exist on cache, fetch price from api
@@ -51,7 +62,7 @@ async function getCoinPriceFromNobitex(
   from: string,
   to: string,
 ): Promise<number> {
-  const cacheKey = `${from}_To_${to}`;
+  const cacheKey = `${from}_TO_${to}`;
   let price = cache?.get<number>(cacheKey);
   if (!price) {
     price = await axios
@@ -59,7 +70,14 @@ async function getCoinPriceFromNobitex(
         srcCurrency: from,
         dstCurrency: to,
       })
-      .then((res) => res.data.stats[`${from}-${to}`].latest / 10);
+      .then((res) => {
+        let divider = 1;
+        if (to === "rls") {
+          // convert rls to IRT
+          divider = 10;
+        }
+        return res.data.stats[`${from}-${to}`].latest / divider;
+      });
 
     cache?.set(cacheKey, price, env.CACHE_INTERVAL);
     //set history for 24 hours change calculation
