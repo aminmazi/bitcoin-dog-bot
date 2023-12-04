@@ -23,7 +23,7 @@ npm run start:dev
 
 # 
 ### 3d party APIs
-💰 Powered by CoinDesk for price information.
+💰 Powered by BlockChain.info for price information.
 
 📈 TAAPI for technical analysis data.
 

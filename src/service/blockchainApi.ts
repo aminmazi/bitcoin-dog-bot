@@ -37,8 +37,8 @@ async function getBtcPriceInUSD(): Promise<number> {
   if (!price) {
     //if price doesn't exist on cache, fetch price from api
     price = await axios
-      .get("https://api.coindesk.com/v1/bpi/currentprice.json")
-      .then((res) => res.data.bpi.USD.rate_float);
+      .get("https://blockchain.info/ticker")
+      .then((res) => res.data.USD["15m"]);
 
     cache?.set(cacheKey, price, env.CACHE_INTERVAL);
     //set history for 24 hours change calculation
